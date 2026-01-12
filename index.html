@@ -3,13 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chúc Mừng Năm Mới 2026</title>
+<title>Chúc Mừng Năm Mới Bính Ngọ</title>
+
+<!-- FONT THƯ PHÁP -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
 body {
   margin: 0;
   height: 100vh;
-  background: #fdf6e3; /* nền ban đầu */
+  background: #fdf6e3;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,26 +21,25 @@ body {
   transition: background 1.5s ease;
 }
 
-/* PHONG BÌ */
+/* ===== PHONG BÌ ===== */
 .envelope {
-  width: 340px;
-  height: 230px;
+  width: 360px;
+  height: 240px;
   background: linear-gradient(#d32f2f, #b71c1c);
   position: relative;
-  border-radius: 12px;
+  border-radius: 14px;
   cursor: pointer;
-  box-shadow: 0 25px 45px rgba(0,0,0,0.35);
+  box-shadow: 0 30px 50px rgba(0,0,0,0.4);
 }
 
 .envelope::before {
   content: "";
   position: absolute;
   top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   background: #b71c1c;
-  clip-path: polygon(0 0, 50% 60%, 100% 0);
+  clip-path: polygon(0 0, 50% 65%, 100% 0);
   transform-origin: top;
   transition: transform 1s ease;
 }
@@ -48,14 +50,14 @@ body {
 
 .open-text {
   position: absolute;
-  bottom: -55px;
+  bottom: -60px;
   width: 100%;
   text-align: center;
   font-size: 20px;
   font-weight: bold;
 }
 
-/* THIỆP */
+/* ===== THIỆP ===== */
 .card {
   display: none;
   position: absolute;
@@ -65,31 +67,33 @@ body {
 
 .card-content {
   background: rgba(255, 248, 220, 0.95);
-  margin: 80px auto;
-  max-width: 720px;
-  padding: 40px;
-  border-radius: 22px;
+  margin: 90px auto;
+  max-width: 760px;
+  padding: 45px;
+  border-radius: 24px;
   text-align: center;
 }
 
-h1 {
-  font-family: "Georgia", serif;
-  color: #c62828;
-  font-size: 42px;
-  margin-bottom: 20px;
+/* TIÊU ĐỀ THƯ PHÁP */
+.title {
+  font-family: 'Great Vibes', cursive;
+  font-size: 54px;
+  color: #b30000;
+  margin-bottom: 25px;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.25);
 }
 
-p {
+.wish {
   font-size: 18px;
   line-height: 1.8;
 }
 
 @keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-/* PHÁO HOA */
+/* ===== PHÁO HOA ===== */
 .firework {
   position: absolute;
   width: 6px;
@@ -100,52 +104,72 @@ p {
 }
 
 @keyframes boom {
-  from {transform: scale(0); opacity:1;}
-  to {transform: scale(15); opacity:0;}
+  from { transform: scale(0); opacity: 1; }
+  to { transform: scale(15); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
+<!-- PHONG BÌ -->
 <div class="envelope" id="envelope">
   <div class="open-text">🎊 Mở Thiệp 🎊</div>
 </div>
 
+<!-- THIỆP -->
 <div class="card" id="card">
   <div class="card-content">
-    <h1>Chúc Mừng Năm Mới Bính Ngọ 2026</h1>
-    <p id="wish"></p>
+    <div class="title">Chúc Mừng Năm Mới Bính Ngọ</div>
+    <div class="wish" id="wish"></div>
   </div>
 </div>
 
-<audio id="music" loop>
-  <source src="https://cdn.pixabay.com/audio/2022/12/20/audio_7b1fe1b1ef.mp3">
+<!-- NHẠC TẾT -->
+<audio id="music">
+  <source src="tet-music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 const wishes = [
-  "Năm mới đến mang theo nhiều hy vọng và niềm vui mới. Chúc bạn luôn mạnh khỏe, học tập tiến bộ và đạt được những mục tiêu mình mong muốn. Mong rằng mỗi ngày trôi qua đều tràn đầy năng lượng tích cực và tiếng cười.",
-  "Xuân về chúc bạn an khang, hạnh phúc và học hành ngày càng tấn tới. Hy vọng năm mới sẽ mở ra nhiều cơ hội tốt đẹp, mang đến những trải nghiệm đáng nhớ và thật nhiều niềm vui.",
-  "Chúc năm mới bình an, may mắn và thành công trong học tập cũng như cuộc sống. Mong rằng mọi cố gắng của bạn đều được đền đáp xứng đáng."
+  "Năm mới mang theo những khởi đầu tươi sáng và nhiều hy vọng tốt đẹp. Chúc bạn luôn mạnh khỏe, tinh thần lạc quan và học tập ngày càng tiến bộ. Mong rằng mỗi ngày đều tràn đầy niềm vui, sự cố gắng được đền đáp xứng đáng và ước mơ dần trở thành hiện thực.",
+  "Xuân về chúc bạn và gia đình luôn bình an, hạnh phúc và gặp nhiều may mắn. Hy vọng năm mới sẽ mang đến cho bạn nhiều động lực trong học tập, thêm tự tin vào bản thân và đạt được những mục tiêu đã đặt ra.",
+  "Chúc năm mới an khang, vạn sự như ý. Mong rằng con đường học tập của bạn luôn thuận lợi, tinh thần luôn vững vàng và mỗi ngày đều có thêm những trải nghiệm đáng nhớ bên gia đình và bạn bè."
 ];
 
 document.getElementById("wish").innerText =
   wishes[Math.floor(Math.random() * wishes.length)];
+
+const music = document.getElementById("music");
+music.volume = 0;
 
 document.getElementById("envelope").onclick = () => {
   document.getElementById("envelope").classList.add("open");
 
   setTimeout(() => {
     document.body.style.background =
-      "url('tet-bg.jpg') center/cover no-repeat";
+      "url('tet-bg.png') center/cover no-repeat";
 
     document.getElementById("envelope").style.display = "none";
     document.getElementById("card").style.display = "block";
-    document.getElementById("music").play();
+
+    music.play();
+    fadeInMusic();
     startFireworks();
   }, 1000);
 };
+
+function fadeInMusic() {
+  let vol = 0;
+  const interval = setInterval(() => {
+    if (vol < 1) {
+      vol += 0.02;
+      music.volume = Math.min(vol, 1);
+    } else {
+      clearInterval(interval);
+    }
+  }, 150);
+}
 
 function startFireworks() {
   setInterval(() => {
