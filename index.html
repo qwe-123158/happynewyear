@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chúc Mừng Năm Mới 2026</title>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #fdf6ec; /* trắng ngà */
+      font-family: 'Be Vietnam Pro', sans-serif;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    /* ===== PHONG BÌ ===== */
+    .envelope-screen {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .envelope {
+      width: 220px;
+      height: 150px;
+      background: #c62828;
+      border-radius: 10px;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .envelope::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent 50%, #b71c1c 50%);
+      border-radius: 10px;
+    }
+
+    .open-btn {
+      margin-top: 30px;
+      font-size: 18px;
+      color: #c62828;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* ===== THIỆP ===== */
+    .card-screen {
+      display: none;
+      min-height: 100vh;
+      background: linear-gradient(to bottom, #fff3d6, #ffffff);
+      padding: 60px 20px;
+      position: relative;
+    }
+
+    .card {
+      max-width: 700px;
+      margin: auto;
+      background: rgba(255,255,255,0.95);
+      border-radius: 20px;
+      padding: 50px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      color: #d32f2f;
+      font-size: 42px;
+      margin-bottom: 30px;
+    }
+
+    .wish {
+      font-size: 18px;
+      line-height: 1.8;
+      color: #333;
+      white-space: pre-line;
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+<!-- MÀN PHONG BÌ -->
+<div class="envelope-screen" id="envelopeScreen">
+  <div class="envelope"></div>
+  <div class="open-btn" onclick="openCard()">Mở Thiệp</div>
+</div>
+
+<!-- MÀN THIỆP -->
+<div class="card-screen" id="cardScreen">
+  <canvas id="fireworks"></canvas>
+
+  <div class="card">
+    <h1>Chúc Mừng Năm Mới Bính Ngọ 2026</h1>
+    <div class="wish" id="wishText"></div>
+  </div>
+
+  <audio autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mp3">
+  </audio>
+</div>
+
+<!-- PHÁO HOA -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+  const wishes = [
+`Năm mới đến mang theo những hy vọng mới,
+Chúc bạn luôn mạnh mẽ và kiên trì trên con đường học tập.
+Mỗi ngày trôi qua đều là một bước tiến vững chắc.
+Học tập hiệu quả, cuộc sống an vui và tràn đầy năng lượng.
+Gia đình bình an, bạn bè yêu thương,
+Và ước mơ sớm trở thành hiện thực.`,
+
+`Xuân mới về mang theo niềm vui và may mắn,
+Chúc bạn học tập tiến bộ, tư duy ngày càng rộng mở.
+Luôn giữ tinh thần lạc quan trước mọi thử thách.
+Mỗi nỗ lực đều được đền đáp xứng đáng.
+Cuộc sống nhẹ nhàng, tâm hồn an yên,
+Một năm mới thật rực rỡ đang chờ phía trước.`,
+
+`Năm mới là khởi đầu của những điều tốt đẹp,
+Chúc bạn học hành suôn sẻ, thành công từng bước.
+Luôn tự tin vào bản thân và không ngừng cố gắng.
+Cuộc sống chan hòa niềm vui và tiếng cười.
+Gia đình hạnh phúc, tương lai rộng mở,
+Một năm trọn vẹn và ý nghĩa.`  
+  ];
+
+  function openCard() {
+    document.getElementById("envelopeScreen").style.display = "none";
+    document.getElementById("cardScreen").style.display = "block";
+
+    const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
+    document.getElementById("wishText").innerText = randomWish;
+
+    setInterval(() => {
+      confetti({
+        particleCount: 120,
+        spread: 90,
+        origin: { y: 0.6 }
+      });
+    }, 2500);
+  }
+</script>
+
+</body>
+</html>
