@@ -1,166 +1,162 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chúc Mừng Năm Mới 2026</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chúc Mừng Năm Mới 2026</title>
 
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: #fdf6e3; /* nền ban đầu */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  transition: background 1.5s ease;
+}
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: #fdf6ec; /* trắng ngà */
-      font-family: 'Be Vietnam Pro', sans-serif;
-      overflow: hidden;
-      text-align: center;
-    }
+/* PHONG BÌ */
+.envelope {
+  width: 340px;
+  height: 230px;
+  background: linear-gradient(#d32f2f, #b71c1c);
+  position: relative;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 25px 45px rgba(0,0,0,0.35);
+}
 
-    /* ===== PHONG BÌ ===== */
-    .envelope-screen {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
+.envelope::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #b71c1c;
+  clip-path: polygon(0 0, 50% 60%, 100% 0);
+  transform-origin: top;
+  transition: transform 1s ease;
+}
 
-    .envelope {
-      width: 220px;
-      height: 150px;
-      background: #c62828;
-      border-radius: 10px;
-      position: relative;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
+.envelope.open::before {
+  transform: rotateX(180deg);
+}
 
-    .envelope::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, transparent 50%, #b71c1c 50%);
-      border-radius: 10px;
-    }
+.open-text {
+  position: absolute;
+  bottom: -55px;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+}
 
-    .open-btn {
-      margin-top: 30px;
-      font-size: 18px;
-      color: #c62828;
-      cursor: pointer;
-      font-weight: 600;
-    }
+/* THIỆP */
+.card {
+  display: none;
+  position: absolute;
+  inset: 0;
+  animation: fadeIn 1.5s forwards;
+}
 
-    /* ===== THIỆP ===== */
-    .card-screen {
-      display: none;
-      min-height: 100vh;
-      background: linear-gradient(to bottom, #fff3d6, #ffffff);
-      padding: 60px 20px;
-      position: relative;
-    }
+.card-content {
+  background: rgba(255, 248, 220, 0.95);
+  margin: 80px auto;
+  max-width: 720px;
+  padding: 40px;
+  border-radius: 22px;
+  text-align: center;
+}
 
-    .card {
-      max-width: 700px;
-      margin: auto;
-      background: rgba(255,255,255,0.95);
-      border-radius: 20px;
-      padding: 50px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-      position: relative;
-      z-index: 2;
-    }
+h1 {
+  font-family: "Georgia", serif;
+  color: #c62828;
+  font-size: 42px;
+  margin-bottom: 20px;
+}
 
-    h1 {
-      font-family: 'Pacifico', cursive;
-      color: #d32f2f;
-      font-size: 42px;
-      margin-bottom: 30px;
-    }
+p {
+  font-size: 18px;
+  line-height: 1.8;
+}
 
-    .wish {
-      font-size: 18px;
-      line-height: 1.8;
-      color: #333;
-      white-space: pre-line;
-    }
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
 
-    canvas {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-    }
-  </style>
+/* PHÁO HOA */
+.firework {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: gold;
+  border-radius: 50%;
+  animation: boom 1s linear infinite;
+}
+
+@keyframes boom {
+  from {transform: scale(0); opacity:1;}
+  to {transform: scale(15); opacity:0;}
+}
+</style>
 </head>
+
 <body>
 
-<!-- MÀN PHONG BÌ -->
-<div class="envelope-screen" id="envelopeScreen">
-  <div class="envelope"></div>
-  <div class="open-btn" onclick="openCard()">Mở Thiệp</div>
+<div class="envelope" id="envelope">
+  <div class="open-text">🎊 Mở Thiệp 🎊</div>
 </div>
 
-<!-- MÀN THIỆP -->
-<div class="card-screen" id="cardScreen">
-  <canvas id="fireworks"></canvas>
-
-  <div class="card">
+<div class="card" id="card">
+  <div class="card-content">
     <h1>Chúc Mừng Năm Mới Bính Ngọ 2026</h1>
-    <div class="wish" id="wishText"></div>
+    <p id="wish"></p>
   </div>
-
-  <audio autoplay loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mp3">
-  </audio>
 </div>
 
-<!-- PHÁO HOA -->
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/12/20/audio_7b1fe1b1ef.mp3">
+</audio>
 
 <script>
-  const wishes = [
-`Năm mới đến mang theo những hy vọng mới,
-Chúc bạn luôn mạnh mẽ và kiên trì trên con đường học tập.
-Mỗi ngày trôi qua đều là một bước tiến vững chắc.
-Học tập hiệu quả, cuộc sống an vui và tràn đầy năng lượng.
-Gia đình bình an, bạn bè yêu thương,
-Và ước mơ sớm trở thành hiện thực.`,
+const wishes = [
+  "Năm mới đến mang theo nhiều hy vọng và niềm vui mới. Chúc bạn luôn mạnh khỏe, học tập tiến bộ và đạt được những mục tiêu mình mong muốn. Mong rằng mỗi ngày trôi qua đều tràn đầy năng lượng tích cực và tiếng cười.",
+  "Xuân về chúc bạn an khang, hạnh phúc và học hành ngày càng tấn tới. Hy vọng năm mới sẽ mở ra nhiều cơ hội tốt đẹp, mang đến những trải nghiệm đáng nhớ và thật nhiều niềm vui.",
+  "Chúc năm mới bình an, may mắn và thành công trong học tập cũng như cuộc sống. Mong rằng mọi cố gắng của bạn đều được đền đáp xứng đáng."
+];
 
-`Xuân mới về mang theo niềm vui và may mắn,
-Chúc bạn học tập tiến bộ, tư duy ngày càng rộng mở.
-Luôn giữ tinh thần lạc quan trước mọi thử thách.
-Mỗi nỗ lực đều được đền đáp xứng đáng.
-Cuộc sống nhẹ nhàng, tâm hồn an yên,
-Một năm mới thật rực rỡ đang chờ phía trước.`,
+document.getElementById("wish").innerText =
+  wishes[Math.floor(Math.random() * wishes.length)];
 
-`Năm mới là khởi đầu của những điều tốt đẹp,
-Chúc bạn học hành suôn sẻ, thành công từng bước.
-Luôn tự tin vào bản thân và không ngừng cố gắng.
-Cuộc sống chan hòa niềm vui và tiếng cười.
-Gia đình hạnh phúc, tương lai rộng mở,
-Một năm trọn vẹn và ý nghĩa.`  
-  ];
+document.getElementById("envelope").onclick = () => {
+  document.getElementById("envelope").classList.add("open");
 
-  function openCard() {
-    document.getElementById("envelopeScreen").style.display = "none";
-    document.getElementById("cardScreen").style.display = "block";
+  setTimeout(() => {
+    document.body.style.background =
+      "url('tet-bg.jpg') center/cover no-repeat";
 
-    const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
-    document.getElementById("wishText").innerText = randomWish;
+    document.getElementById("envelope").style.display = "none";
+    document.getElementById("card").style.display = "block";
+    document.getElementById("music").play();
+    startFireworks();
+  }, 1000);
+};
 
-    setInterval(() => {
-      confetti({
-        particleCount: 120,
-        spread: 90,
-        origin: { y: 0.6 }
-      });
-    }, 2500);
-  }
+function startFireworks() {
+  setInterval(() => {
+    const fw = document.createElement("div");
+    fw.className = "firework";
+    fw.style.left = Math.random() * window.innerWidth + "px";
+    fw.style.top = Math.random() * window.innerHeight + "px";
+    document.body.appendChild(fw);
+    setTimeout(() => fw.remove(), 1000);
+  }, 300);
+}
 </script>
 
 </body>
