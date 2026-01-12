@@ -2,199 +2,184 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chúc Mừng Năm Mới Bính Ngọ</title>
 
-<!-- FONT THƯ PHÁP -->
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro&family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:'Be Vietnam Pro',sans-serif;
+  background:#fdf6e3;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  transition:background 1.2s ease;
 }
 
-body {
-  margin: 0;
-  width: 100%;
-  height: 100vh;
-  background: #fdf6e3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  font-family: Arial, sans-serif;
-  transition: background 1.2s ease;
+/* NỀN TẾT – KHÔNG VỠ */
+body.tet-bg{
+  background:url("tet-bg.png") no-repeat center center/cover;
 }
 
-/* ===== PHONG BÌ ===== */
-.envelope {
-  width: min(90vw, 380px);
-  height: calc(min(90vw, 380px) * 0.68);
-  background: linear-gradient(#d32f2f, #b71c1c);
-  border-radius: 16px;
-  position: relative;
-  cursor: pointer;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+.envelope-container{text-align:center}
+
+.envelope{
+  width:300px;
+  height:200px;
+  background:linear-gradient(145deg,#c62828,#e53935);
+  border-radius:14px;
+  position:relative;
+  box-shadow:0 12px 30px rgba(0,0,0,.3);
 }
 
-.envelope::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: #b71c1c;
-  clip-path: polygon(0 0, 50% 65%, 100% 0);
-  transform-origin: top;
-  transition: transform 1s ease;
+.envelope::before{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:#b71c1c;
+  clip-path:polygon(0 0,50% 55%,100% 0);
+  border-radius:14px 14px 0 0;
 }
 
-.envelope.open::before {
-  transform: rotateX(180deg);
+.open-btn{
+  margin-top:20px;
+  padding:12px 32px;
+  font-size:18px;
+  border-radius:30px;
+  border:none;
+  background:#d32f2f;
+  color:#fff;
+  cursor:pointer;
 }
 
-.open-text {
-  position: absolute;
-  bottom: -48px;
-  width: 100%;
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
+.card{
+  display:none;
+  max-width:720px;
+  padding:30px;
+  margin:20px;
+  background:rgba(255,255,255,.9);
+  border-radius:22px;
+  text-align:center;
+  box-shadow:0 12px 40px rgba(0,0,0,.35);
+  animation:zoomIn 1s ease;
 }
 
-/* ===== THIỆP ===== */
-.card {
-  display: none;
-  position: fixed;
-  inset: 0;
-  overflow-y: auto;
+h1{
+  font-family:'Great Vibes',cursive;
+  font-size:46px;
+  color:#c62828;
 }
 
-.card.show {
-  animation: fadeIn 1.5s forwards;
+.message{
+  font-size:16px;
+  line-height:1.7;
 }
 
-.card-content {
-  background: rgba(255, 248, 220, 0.95);
-  width: min(92%, 780px);
-  margin: 80px auto 40px;
-  padding: 32px 24px;
-  border-radius: 22px;
-  text-align: center;
+@media(max-width:480px){
+  h1{font-size:36px}
+  .message{font-size:15px}
 }
 
-/* TIÊU ĐỀ */
-.title {
-  font-family: 'Great Vibes', cursive;
-  font-size: clamp(34px, 8vw, 56px);
-  color: #b30000;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.25);
+/* ===== PHÁO HOA TIA ===== */
+.firework{
+  position:fixed;
+  left:50%;
+  top:50%;
+  pointer-events:none;
 }
 
-.wish {
-  font-size: clamp(15px, 4.2vw, 18px);
-  line-height: 1.9;
-  color: #333;
+.spark{
+  position:absolute;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  animation:shoot 1.2s ease-out forwards;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+@keyframes shoot{
+  0%{transform:translate(0,0) scale(1);opacity:1}
+  100%{transform:translate(var(--x),var(--y)) scale(.2);opacity:0}
 }
 
-/* ===== PHÁO HOA ===== */
-.firework {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: gold;
-  border-radius: 50%;
-  animation: firework 1s linear infinite;
-  pointer-events: none;
-}
-
-@keyframes firework {
-  from { transform: scale(0); opacity: 1; }
-  to { transform: scale(16); opacity: 0; }
-}
-
-/* MOBILE TINH CHỈNH */
-@media (max-width: 480px) {
-  .open-text {
-    font-size: 16px;
-  }
+@keyframes zoomIn{
+  from{transform:scale(.7);opacity:0}
+  to{transform:scale(1);opacity:1}
 }
 </style>
 </head>
 
 <body>
 
-<!-- PHONG BÌ -->
-<div class="envelope" id="envelope">
-  <div class="open-text">🎊 Mở Thiệp 🎊</div>
+<div class="envelope-container" id="envelopeBox">
+  <div class="envelope"></div>
+  <button class="open-btn" onclick="openCard()">Mở Thiệp</button>
 </div>
 
-<!-- THIỆP -->
 <div class="card" id="card">
-  <div class="card-content">
-    <div class="title">Chúc Mừng Năm Mới Bính Ngọ</div>
-    <div class="wish" id="wish"></div>
-  </div>
+  <h1>Chúc Mừng Năm Mới Bính Ngọ</h1>
+  <div class="message" id="message"></div>
 </div>
 
-<!-- NHẠC -->
-<audio id="music" src="tet-music.mp3" preload="auto"></audio>
+<audio id="music" src="tet-music.mp3" loop></audio>
 
 <script>
-const wishes = [
-  "Năm mới mang theo những khởi đầu tươi sáng và nhiều hy vọng tốt đẹp. Chúc bạn luôn mạnh khỏe, tinh thần lạc quan và học tập ngày càng tiến bộ. Mong mỗi ngày đều tràn đầy niềm vui, sự cố gắng được đền đáp xứng đáng và ước mơ dần trở thành hiện thực.",
-  "Xuân về mang theo không khí ấm áp và yêu thương. Chúc bạn năm mới an khang, hạnh phúc, học tập thuận lợi, gặp nhiều may mắn và luôn giữ được niềm tin vào chính mình.",
-  "Chúc năm mới tràn ngập tiếng cười, sức khỏe dồi dào và thành công trong học tập. Mong rằng mọi dự định của bạn đều suôn sẻ và mỗi ngày đều là một ngày ý nghĩa."
+const wishes=[
+"Xuân Bính Ngọ gõ cửa mang theo nhiều may mắn.\nChúc bạn học tập tiến bộ mỗi ngày.\nTinh thần luôn vững vàng và lạc quan.\nGia đình sum vầy, ấm áp yêu thương.\nMột năm mới an khang thịnh vượng.",
+
+"Năm mới đến, chúc bạn tràn đầy năng lượng.\nHọc tập thuận lợi, đạt nhiều thành tích.\nMỗi ngày đều có niềm vui mới.\nGia đình bình an, hạnh phúc.\nXuân mới rực rỡ như pháo hoa."
 ];
 
-document.getElementById("wish").innerText =
-  wishes[Math.floor(Math.random() * wishes.length)];
+function openCard(){
+  document.getElementById("envelopeBox").style.display="none";
+  document.getElementById("card").style.display="block";
+  document.body.classList.add("tet-bg");
 
-const envelope = document.getElementById("envelope");
-const card = document.getElementById("card");
-const music = document.getElementById("music");
+  document.getElementById("message").innerText=
+    wishes[Math.floor(Math.random()*wishes.length)];
 
-music.volume = 0;
+  // NHẠC VÀO DẦN
+  const music=document.getElementById("music");
+  music.volume=0;
+  music.play();
+  let v=0;
+  const fade=setInterval(()=>{
+    v+=0.02;
+    if(v>=1){v=1;clearInterval(fade)}
+    music.volume=v;
+  },200);
 
-envelope.addEventListener("click", () => {
-  envelope.classList.add("open");
-
-  setTimeout(() => {
-    document.body.style.background =
-      "url('tet-bg.png') center/cover no-repeat fixed";
-
-    envelope.style.display = "none";
-    card.style.display = "block";
-    card.classList.add("show");
-
-    music.play();
-    fadeInMusic();
-    startFireworks();
-  }, 900);
-});
-
-function fadeInMusic() {
-  let vol = 0;
-  const timer = setInterval(() => {
-    vol += 0.02;
-    music.volume = Math.min(vol, 1);
-    if (vol >= 1) clearInterval(timer);
-  }, 140);
+  // PHÁO HOA TIA
+  setInterval(createFirework,600);
 }
 
-function startFireworks() {
-  setInterval(() => {
-    const fw = document.createElement("div");
-    fw.className = "firework";
-    fw.style.left = Math.random() * window.innerWidth + "px";
-    fw.style.top = Math.random() * window.innerHeight + "px";
-    document.body.appendChild(fw);
-    setTimeout(() => fw.remove(), 1000);
-  }, 350);
+function createFirework(){
+  const fw=document.createElement("div");
+  fw.className="firework";
+  fw.style.left=Math.random()*100+"vw";
+  fw.style.top=Math.random()*80+"vh";
+
+  const colors=["#ffd54f","#ff5252","#ff9800","#f06292","#ffeb3b"];
+
+  for(let i=0;i<24;i++){
+    const s=document.createElement("div");
+    s.className="spark";
+    const angle=Math.random()*2*Math.PI;
+    const distance=80+Math.random()*70;
+    s.style.setProperty("--x",Math.cos(angle)*distance+"px");
+    s.style.setProperty("--y",Math.sin(angle)*distance+"px");
+    s.style.background=colors[Math.floor(Math.random()*colors.length)];
+    fw.appendChild(s);
+  }
+
+  document.body.appendChild(fw);
+  setTimeout(()=>fw.remove(),1300);
 }
 </script>
 
