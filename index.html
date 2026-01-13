@@ -1,121 +1,108 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chúc Mừng Năm Mới Bính Ngọ</title>
 
-<!-- Font thư pháp -->
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --red:#d32f2f;
-  --dark-red:#b71c1c;
-  --bg:#fbf3e6;
-}
-
-*{box-sizing:border-box}
-
 body{
   margin:0;
-  background:var(--bg);
-  font-family:Arial, sans-serif;
   height:100vh;
+  background:#fbf3e6;
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
+  font-family:Arial, sans-serif;
   overflow:hidden;
 }
 
 /* ================= PHONG BÌ ================= */
-.wrapper{
-  text-align:center;
-}
+.wrapper{text-align:center}
 
 .envelope{
   position:relative;
   width:280px;
-  height:180px;
+  height:190px;
   margin:auto;
-  perspective:1200px;
 }
 
-/* Thân */
-.body{
+/* THÂN */
+.envelope-body{
   position:absolute;
   bottom:0;
   width:100%;
   height:140px;
-  background:var(--red);
-  border-radius:0 0 18px 18px;
+  background:#d32f2f;
+  border-radius:0 0 20px 20px;
   box-shadow:0 12px 25px rgba(0,0,0,.25);
   z-index:1;
 }
 
-/* Nắp – KHÍT TUYỆT ĐỐI */
-.flap{
+/* NẮP – 2D – KHÍT PIXEL */
+.envelope-flap{
   position:absolute;
-  top:0;
+  top:50px;               /* KHỚP CHÍNH XÁC */
   left:0;
   width:100%;
   height:90px;
-  background:var(--dark-red);
+  background:#b71c1c;
   clip-path:polygon(0 0,50% 100%,100% 0);
-  transform-origin:center bottom;
-  transform:rotateX(0deg);
-  transition:transform 1s ease;
+  transform-origin:50% 100%;
+  transition:transform 0.9s ease, top 0.9s ease;
   z-index:2;
 }
 
-/* Khi mở */
-.envelope.open .flap{
-  transform:rotateX(125deg);
+/* MỞ – KHÔNG BIẾN MẤT */
+.envelope.open .envelope-flap{
+  transform:rotateZ(-180deg);
+  top:-20px;
 }
 
 /* ================= NÚT ================= */
 button{
-  margin-top:20px;
+  margin-top:22px;
   padding:10px 26px;
   border:none;
   border-radius:999px;
-  background:var(--red);
-  color:white;
+  background:#d32f2f;
+  color:#fff;
   font-size:16px;
   cursor:pointer;
 }
 
 /* ================= THIỆP ================= */
 .card{
-  position:absolute;
+  position:fixed;
   inset:0;
   display:none;
-  align-items:center;
   justify-content:center;
+  align-items:center;
 }
 
 .card.show{
   display:flex;
-  animation:fadeIn 1.2s ease forwards;
+  animation:fade 1s ease forwards;
 }
 
 .card-inner{
   width:90%;
   max-width:520px;
   background:
-    linear-gradient(rgba(255,255,255,.92),rgba(255,255,255,.92)),
+    linear-gradient(rgba(255,255,255,.95),rgba(255,255,255,.95)),
     url("tet-bg.png") center/cover no-repeat;
-  border-radius:20px;
   padding:28px 24px;
+  border-radius:20px;
   text-align:center;
   box-shadow:0 20px 40px rgba(0,0,0,.35);
 }
 
 h1{
   font-family:'Dancing Script', cursive;
-  color:#b71c1c;
   font-size:36px;
-  margin-bottom:16px;
+  color:#b71c1c;
 }
 
 p{
@@ -130,25 +117,23 @@ p{
   width:4px;
   height:4px;
   border-radius:50%;
-  animation:fire 1.2s linear infinite;
+  animation:boom 1.2s linear infinite;
 }
 
-@keyframes fire{
+@keyframes boom{
   0%{transform:scale(0);opacity:1}
   100%{transform:scale(14);opacity:0}
 }
 
-/* ================= HIỆU ỨNG ================= */
-@keyframes fadeIn{
+@keyframes fade{
   from{opacity:0}
   to{opacity:1}
 }
 
-/* ================= MOBILE ================= */
+/* MOBILE */
 @media(max-width:480px){
-  .envelope{width:220px;height:150px}
+  .envelope{width:220px;height:160px}
   h1{font-size:28px}
-  p{font-size:15px}
 }
 </style>
 </head>
@@ -157,13 +142,12 @@ p{
 
 <div class="wrapper">
   <div class="envelope" id="env">
-    <div class="flap"></div>
-    <div class="body"></div>
+    <div class="envelope-flap"></div>
+    <div class="envelope-body"></div>
   </div>
   <button onclick="openCard()">Mở Thiệp</button>
 </div>
 
-<!-- THIỆP -->
 <div class="card" id="card">
   <div class="card-inner">
     <h1>Chúc Mừng Năm Mới Bính Ngọ</h1>
@@ -171,14 +155,13 @@ p{
   </div>
 </div>
 
-<!-- NHẠC -->
 <audio id="music" src="music.mp3" loop></audio>
 
 <script>
 const wishes=[
-"Chúc năm mới tràn đầy năng lượng tích cực, học tập tiến bộ từng ngày, luôn giữ vững niềm tin vào bản thân và tương lai phía trước.",
-"Mong rằng năm Bính Ngọ mang đến thật nhiều may mắn, sức khỏe dồi dào, học hành thuận lợi và những ước mơ dần trở thành hiện thực.",
-"Chúc bạn một năm mới an vui, học tập hiệu quả, mỗi ngày đều có động lực để tiến lên và không ngừng hoàn thiện bản thân."
+"Chúc năm mới sức khỏe dồi dào, học tập tiến bộ, mọi ước mơ đều thành hiện thực.",
+"Mong năm Bính Ngọ mang đến thật nhiều niềm vui, may mắn và thành công.",
+"Chúc một năm mới an khang, học hành thuận lợi và tràn đầy năng lượng tích cực."
 ];
 
 function openCard(){
@@ -189,10 +172,9 @@ function openCard(){
       wishes[Math.floor(Math.random()*wishes.length)];
     playMusic();
     fireworks();
-  },900);
+  },800);
 }
 
-/* Nhạc fade in */
 function playMusic(){
   const m=document.getElementById("music");
   m.volume=0;
@@ -204,15 +186,13 @@ function playMusic(){
   },100);
 }
 
-/* Pháo hoa */
 function fireworks(){
   setInterval(()=>{
     const f=document.createElement("div");
     f.className="firework";
     f.style.left=Math.random()*100+"vw";
     f.style.top=Math.random()*100+"vh";
-    f.style.background=
-      `hsl(${Math.random()*360},100%,60%)`;
+    f.style.background=`hsl(${Math.random()*360},100%,60%)`;
     document.body.appendChild(f);
     setTimeout(()=>f.remove(),1200);
   },250);
