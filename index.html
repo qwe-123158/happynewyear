@@ -26,31 +26,23 @@ body{
   position:relative;
   width:280px;
   height:160px;
-  margin:auto;
-}
-
-/* THÂN */
-.env-body{
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height:100px;
   background:#d32f2f;
-  border-radius:0 0 16px 16px;
-  box-shadow:0 14px 30px rgba(0,0,0,.25);
-  z-index:1;
+  border-radius:0 0 18px 18px;
+  box-shadow:0 16px 35px rgba(0,0,0,.28);
+  overflow:hidden;
 }
 
-/* NẮP – CLIP-PATH CHUẨN PIXEL */
-.env-flap{
+/* NẮP – GẮN TRỰC TIẾP VÀO THÂN */
+.envelope::before{
+  content:'';
   position:absolute;
   top:0;
   left:0;
   width:100%;
-  height:60px;
+  height:80px; /* = 50% thân */
   background:#c62828;
 
-  /* 👇 TAM GIÁC CÂN TUYỆT ĐỐI */
+  /* tam giác cân CHUẨN */
   clip-path:polygon(0 0,50% 100%,100% 0);
 
   transform-origin:top center;
@@ -58,14 +50,14 @@ body{
   z-index:2;
 }
 
-/* MỞ NẮP */
-.open .env-flap{
+/* MỞ */
+.envelope.open::before{
   transform:rotateX(180deg);
 }
 
 /* NÚT */
 button{
-  margin-top:20px;
+  margin-top:22px;
   padding:12px 28px;
   border:none;
   border-radius:30px;
@@ -91,18 +83,18 @@ button{
   content:'';
   position:absolute;
   inset:0;
-  background:rgba(0,0,0,.18);
+  background:rgba(0,0,0,.12); /* sáng hơn */
 }
 
 .content{
   position:relative;
   max-width:720px;
   margin:20px;
-  background:rgba(255,253,245,.97);
-  padding:34px;
-  border-radius:20px;
+  background:rgba(255,255,250,.98);
+  padding:36px;
+  border-radius:22px;
   text-align:center;
-  box-shadow:0 20px 45px rgba(0,0,0,.35);
+  box-shadow:0 20px 45px rgba(0,0,0,.3);
   z-index:2;
 }
 
@@ -110,16 +102,16 @@ h1{
   font-family:'Great Vibes',cursive;
   font-size:44px;
   color:#b71c1c;
-  margin-bottom:16px;
+  margin-bottom:18px;
 }
 
 p{
   font-size:17px;
-  line-height:1.7;
-  color:#5d4037;
+  line-height:1.75;
+  color:#4e342e;
 }
 
-/* ================= PHÁO HOA ================= */
+/* PHÁO HOA */
 canvas{
   position:fixed;
   inset:0;
@@ -129,7 +121,8 @@ canvas{
 
 /* MOBILE */
 @media(max-width:600px){
-  .envelope{width:240px}
+  .envelope{width:240px;height:140px}
+  .envelope::before{height:70px}
   h1{font-size:34px}
   p{font-size:15px}
 }
@@ -139,10 +132,7 @@ canvas{
 <body>
 
 <div class="wrapper" id="wrap">
-  <div class="envelope" id="env">
-    <div class="env-flap"></div>
-    <div class="env-body"></div>
-  </div>
+  <div class="envelope" id="env"></div>
   <button id="openBtn">Mở Thiệp</button>
 </div>
 
@@ -154,18 +144,16 @@ canvas{
   </div>
 </div>
 
-<audio id="music" src="music.mp3" loop></audio>
+<audio id="music" src="tet-music.mp3" loop></audio>
 
 <script>
-/* LỜI CHÚC */
 const wishes=[
-"Chúc năm mới sức khỏe dồi dào, học tập tiến bộ, tinh thần lạc quan và luôn vững bước trên con đường phía trước.",
-"Xuân sang mang theo niềm vui mới, chúc bạn gặp nhiều may mắn, thành công và luôn giữ được đam mê của mình."
+"Chúc năm mới sức khỏe dồi dào, học tập tiến bộ, tinh thần vững vàng và luôn tràn đầy niềm vui trong cuộc sống.",
+"Xuân mới đến mang theo hy vọng mới, chúc bạn gặt hái nhiều thành công và giữ mãi đam mê trên con đường học tập."
 ];
 document.getElementById("wish").innerText=
 wishes[Math.floor(Math.random()*wishes.length)];
 
-/* MỞ THIỆP */
 const env=document.getElementById("env");
 const card=document.getElementById("card");
 const music=document.getElementById("music");
@@ -189,7 +177,7 @@ document.getElementById("openBtn").onclick=()=>{
   },900);
 };
 
-/* PHÁO HOA */
+/* PHÁO HOA TIA */
 const canvas=document.getElementById("fw");
 const ctx=canvas.getContext("2d");
 canvas.width=innerWidth;
@@ -200,13 +188,13 @@ let ps=[];
 function boom(){
   const x=Math.random()*canvas.width;
   const y=Math.random()*canvas.height/2;
-  const c=["#ffeb3b","#ff5722","#ff9800","#e91e63"];
-  for(let i=0;i<80;i++){
+  const colors=["#ffeb3b","#ff5722","#ff9800","#e91e63","#ffc107"];
+  for(let i=0;i<100;i++){
     ps.push({x,y,
-      vx:(Math.random()-.5)*6,
-      vy:(Math.random()-.5)*6,
-      l:100,
-      c:c[Math.floor(Math.random()*c.length)]
+      vx:(Math.random()-.5)*7,
+      vy:(Math.random()-.5)*7,
+      l:110,
+      c:colors[Math.floor(Math.random()*colors.length)]
     });
   }
 }
@@ -221,7 +209,7 @@ function draw(){
   requestAnimationFrame(draw);
 }
 function fireworks(){
-  setInterval(boom,800);
+  setInterval(boom,900);
   draw();
 }
 </script>
