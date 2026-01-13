@@ -5,60 +5,68 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chúc Mừng Năm Mới Bính Ngọ</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Be+Vietnam+Pro:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
+/* ===== RESET ===== */
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:'Be Vietnam Pro', sans-serif;
 }
 
 body{
   min-height:100vh;
-  background:#fbf3df;
   display:flex;
   justify-content:center;
   align-items:center;
+  background:#fbf3df;
   overflow:hidden;
+  font-family:'Be Vietnam Pro', sans-serif;
 }
 
 /* ===== PHONG BÌ ===== */
 .envelope-wrap{
   text-align:center;
+  z-index:10;
 }
 
 .envelope{
   position:relative;
   width:280px;
-  height:180px;
+  height:200px; /* đủ không gian cho nắp */
   margin:auto;
 }
 
-/* THÂN */
+/* THÂN PHONG BÌ – MỐC CHUẨN */
 .env-body{
   position:absolute;
   bottom:0;
   width:100%;
   height:120px;
   background:#d32f2f;
-  border-radius:0 0 14px 14px;
-  box-shadow:0 12px 30px rgba(0,0,0,.25);
+  border-radius:0 0 16px 16px;
+  box-shadow:0 14px 35px rgba(0,0,0,.28);
   z-index:2;
 }
 
-/* NẮP – FIX CHUẨN */
+/* NẮP PHONG BÌ – CĂN PIXEL CHUẨN */
 .env-flap{
   position:absolute;
-  top:0;
+
+  /* 👇 ĐẶT ĐÚNG MÉP TRÊN CỦA THÂN */
+  bottom:120px;
+
   left:0;
   width:0;
   height:0;
+
+  /* 👇 TAM GIÁC CÂN TUYỆT ĐỐI */
   border-left:140px solid transparent;
   border-right:140px solid transparent;
   border-bottom:80px solid #c62828;
-  transform-origin:top center;
+
+  transform-origin:bottom center;
   transform:rotateX(0deg);
   transition:transform .9s ease;
   z-index:3;
@@ -71,8 +79,8 @@ body{
 
 /* NÚT */
 .open-btn{
-  margin-top:20px;
-  padding:10px 26px;
+  margin-top:22px;
+  padding:11px 28px;
   border:none;
   border-radius:30px;
   background:#d32f2f;
@@ -88,7 +96,8 @@ body{
   display:none;
   justify-content:center;
   align-items:center;
-  background:url('tet-bg.png') center/cover no-repeat;
+  background:url('tet-bg.png') center/contain no-repeat;
+  background-color:#b71c1c;
 }
 
 .card.show{
@@ -99,24 +108,27 @@ body{
   content:'';
   position:absolute;
   inset:0;
-  background:rgba(0,0,0,.25);
+  background:rgba(0,0,0,.15);
 }
 
+/* KHUNG CÂU CHÚC – SÁNG RÕ */
 .card-content{
   position:relative;
-  background:rgba(255,248,230,.95);
-  padding:30px 25px;
-  border-radius:18px;
+  max-width:720px;
+  margin:20px;
+  background:rgba(255,253,245,.98);
+  padding:32px 28px;
+  border-radius:20px;
   text-align:center;
-  max-width:700px;
+  box-shadow:0 18px 45px rgba(0,0,0,.3);
   z-index:2;
 }
 
 h1{
   font-family:'Great Vibes', cursive;
-  font-size:42px;
+  font-size:44px;
   color:#b71c1c;
-  margin-bottom:15px;
+  margin-bottom:16px;
 }
 
 p{
@@ -133,10 +145,17 @@ canvas{
   z-index:1;
 }
 
-/* MOBILE */
+/* ===== MOBILE ===== */
 @media(max-width:600px){
-  .envelope{width:240px;}
-  h1{font-size:32px;}
+  .envelope{width:240px;height:190px;}
+  .env-flap{
+    border-left:120px solid transparent;
+    border-right:120px solid transparent;
+    border-bottom:70px solid #c62828;
+    bottom:120px;
+  }
+  h1{font-size:34px;}
+  p{font-size:15px;}
 }
 </style>
 </head>
@@ -162,25 +181,26 @@ canvas{
 <audio id="music" src="music.mp3" loop></audio>
 
 <script>
-/* LỜI CHÚC */
+/* ===== LỜI CHÚC ===== */
 const wishes=[
-"Chúc năm mới tràn đầy năng lượng, học tập tiến bộ, tinh thần luôn lạc quan và gặt hái nhiều thành công trong cuộc sống.",
-"Xuân về mang theo niềm vui mới, chúc bạn học tập thật tốt, luôn mạnh khỏe và vững bước trên con đường tương lai."
+"Chúc năm mới tràn đầy năng lượng tích cực, học tập tiến bộ từng ngày, tinh thần luôn lạc quan và vững bước trên con đường tương lai phía trước.",
+"Xuân về mang theo niềm vui mới, chúc bạn mạnh khỏe, học tập thật tốt, gặp nhiều may mắn và luôn giữ vững ước mơ của mình."
 ];
-document.getElementById('wish').innerText=
+document.getElementById("wish").innerText=
 wishes[Math.floor(Math.random()*wishes.length)];
 
-const btn=document.getElementById('btn');
-const env=document.getElementById('env');
-const card=document.getElementById('card');
-const music=document.getElementById('music');
+/* ===== MỞ THIỆP ===== */
+const btn=document.getElementById("btn");
+const env=document.getElementById("env");
+const card=document.getElementById("card");
+const music=document.getElementById("music");
 
 btn.onclick=()=>{
-  env.classList.add('open');
+  env.classList.add("open");
 
   setTimeout(()=>{
-    document.getElementById('wrap').style.display='none';
-    card.classList.add('show');
+    document.getElementById("wrap").style.display="none";
+    card.classList.add("show");
 
     music.volume=0;
     music.play();
@@ -194,27 +214,28 @@ btn.onclick=()=>{
   },900);
 };
 
-/* PHÁO HOA */
-const canvas=document.getElementById('fw');
-const ctx=canvas.getContext('2d');
+/* ===== PHÁO HOA TIA ===== */
+const canvas=document.getElementById("fw");
+const ctx=canvas.getContext("2d");
 
 function resize(){
   canvas.width=innerWidth;
   canvas.height=innerHeight;
 }
-resize();onresize=resize;
+resize();
+onresize=resize;
 
 let particles=[];
 function fire(){
   const x=Math.random()*canvas.width;
   const y=Math.random()*canvas.height/2;
-  const colors=['#ffeb3b','#ff5722','#ff9800','#e91e63'];
-  for(let i=0;i<80;i++){
+  const colors=["#ffeb3b","#ff5722","#ff9800","#e91e63"];
+  for(let i=0;i<90;i++){
     particles.push({
       x,y,
-      vx:(Math.random()-0.5)*6,
-      vy:(Math.random()-0.5)*6,
-      life:100,
+      vx:(Math.random()-0.5)*7,
+      vy:(Math.random()-0.5)*7,
+      life:110,
       color:colors[Math.floor(Math.random()*colors.length)]
     });
   }
