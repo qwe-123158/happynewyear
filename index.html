@@ -5,239 +5,242 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chúc Mừng Năm Mới Bính Ngọ</title>
 
-<!-- Font -->
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<!-- FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Be+Vietnam+Pro:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-*{box-sizing:border-box}
-body{
+*{
   margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Be Vietnam Pro', sans-serif;
+}
+
+body{
   min-height:100vh;
+  background:#fbf3df;
   display:flex;
   justify-content:center;
   align-items:center;
-  background:#fbf4e6;
-  font-family:"Be Vietnam Pro",sans-serif;
   overflow:hidden;
 }
 
-/* ===== NỀN TẾT (SAU KHI MỞ) ===== */
-body.tet-bg{
-  background:url("tet-bg.png") center center no-repeat;
-  background-size:contain;
-  background-color:#b71c1c;
-}
-@media(min-width:768px){
-  body.tet-bg{background-size:cover;}
+/* ===== PHONG BÌ ===== */
+.envelope-wrap{
+  text-align:center;
+  z-index:10;
 }
 
-/* ===== PHONG BÌ ===== */
-.envelope-wrapper{
-  text-align:center;
-}
 .envelope{
   position:relative;
-  width:320px;
-  max-width:80vw;
-  height:200px;
+  width:280px;
+  height:180px;
   margin:auto;
 }
 
-/* Thân phong bì */
+/* THÂN */
 .env-body{
   position:absolute;
   bottom:0;
   width:100%;
   height:140px;
   background:#d32f2f;
-  border-radius:0 0 12px 12px;
+  border-radius:0 0 14px 14px;
   box-shadow:0 10px 25px rgba(0,0,0,.25);
+  z-index:1;
 }
 
-/* Nắp phong bì – SỬA LỆCH 100% */
+/* NẮP – ĐÃ FIX LỆCH */
 .env-flap{
   position:absolute;
-  top:20px;
+  top:0;
   left:0;
   width:100%;
   height:140px;
   background:#c62828;
-  clip-path:polygon(0 0,100% 0,50% 65%);
+  clip-path:polygon(0 0,100% 0,50% 55%);
+  transform:translateY(22px);
   transform-origin:top center;
   transition:transform .9s ease;
   z-index:3;
 }
 
-/* Hai mép trong */
-.env-left,.env-right{
-  position:absolute;
-  bottom:0;
-  width:50%;
-  height:140px;
-  background:#e53935;
-}
-.env-left{
-  left:0;
-  clip-path:polygon(0 0,100% 100%,0 100%);
-}
-.env-right{
-  right:0;
-  clip-path:polygon(100% 0,100% 100%,0 100%);
-}
-
-/* Khi mở */
-.envelope.open .env-flap{
-  transform:rotateX(180deg);
+.open .env-flap{
+  transform:translateY(22px) rotateX(180deg);
 }
 
 /* NÚT */
 .open-btn{
   margin-top:20px;
-  padding:12px 28px;
+  padding:10px 26px;
   border:none;
   border-radius:30px;
   background:#d32f2f;
-  color:#fff;
-  font-size:18px;
+  color:white;
+  font-size:16px;
   cursor:pointer;
 }
 
 /* ===== THIỆP ===== */
 .card{
+  position:fixed;
+  inset:0;
   display:none;
-  max-width:650px;
-  width:90%;
-  background:rgba(255,255,255,.92);
-  border-radius:20px;
-  padding:28px;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
   text-align:center;
-  box-shadow:0 15px 40px rgba(0,0,0,.25);
+  padding:20px;
+  background:url('tet-bg.png') center/cover no-repeat;
+}
+
+.card.show{
+  display:flex;
+}
+
+.card::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.25);
+}
+
+.card-content{
+  position:relative;
+  max-width:700px;
+  background:rgba(255,248,230,.95);
+  padding:30px 25px;
+  border-radius:18px;
+  box-shadow:0 15px 40px rgba(0,0,0,.3);
   z-index:2;
 }
 
-.card h1{
-  font-family:"Dancing Script",cursive;
+h1{
+  font-family:'Great Vibes', cursive;
   font-size:42px;
-  color:#c62828;
+  color:#b71c1c;
+  margin-bottom:15px;
 }
 
-.card p{
+p{
   font-size:17px;
   line-height:1.7;
-  margin-top:14px;
+  color:#5d4037;
 }
 
 /* ===== PHÁO HOA ===== */
 canvas{
   position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+  inset:0;
   pointer-events:none;
   z-index:1;
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:600px){
+  h1{font-size:32px;}
+  p{font-size:15px;}
+  .envelope{width:240px;}
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="fireworks"></canvas>
-
-<!-- PHONG BÌ -->
-<div class="envelope-wrapper" id="envBox">
+<div class="envelope-wrap" id="envelopeWrap">
   <div class="envelope" id="envelope">
-    <div class="env-flap"></div>
-    <div class="env-left"></div>
-    <div class="env-right"></div>
+    <div class="env-flap" id="flap"></div>
     <div class="env-body"></div>
   </div>
-  <button class="open-btn" onclick="openCard()">Mở Thiệp</button>
+  <button class="open-btn" id="openBtn">Mở Thiệp</button>
 </div>
 
-<!-- THIỆP -->
 <div class="card" id="card">
-  <h1>Chúc Mừng Năm Mới Bính Ngọ</h1>
-  <p id="wish"></p>
+  <canvas id="fireworks"></canvas>
+  <div class="card-content">
+    <h1>Chúc Mừng Năm Mới Bính Ngọ</h1>
+    <p id="wish"></p>
+  </div>
 </div>
 
-<!-- NHẠC -->
-<audio id="music" src="tet-music.mp3" loop></audio>
+<audio id="music" src="music.mp3" loop></audio>
 
 <script>
 /* ===== LỜI CHÚC ===== */
 const wishes=[
-"Chúc năm mới an khang thịnh vượng, học tập tiến bộ, mọi ước mơ đều thành hiện thực. Mong bạn luôn giữ được niềm vui, sự cố gắng và tinh thần lạc quan trong cuộc sống.",
-"Xuân mới đến mang theo nhiều hy vọng. Chúc bạn sức khỏe dồi dào, học hành thuận lợi, mỗi ngày đều là một ngày tràn đầy năng lượng tích cực.",
-"Năm mới Bính Ngọ, chúc bạn luôn bền bỉ, mạnh mẽ, vượt qua mọi thử thách, đạt được những thành quả xứng đáng trong học tập và cuộc sống."
+"Chúc năm mới tràn đầy năng lượng, học tập tiến bộ từng ngày, luôn giữ vững ước mơ và niềm tin vào bản thân. Mong bạn gặp nhiều may mắn, sức khỏe dồi dào và thành công trên con đường phía trước.",
+"Xuân về mang theo niềm vui mới, chúc bạn học tập thật tốt, tinh thần luôn lạc quan, mỗi ngày đều là một bước tiến vững chắc đến tương lai tươi sáng."
 ];
-document.getElementById("wish").innerText =
+
+document.getElementById('wish').innerText=
 wishes[Math.floor(Math.random()*wishes.length)];
 
-/* ===== MỞ THIỆP ===== */
-function openCard(){
-  document.getElementById("envelope").classList.add("open");
+const btn=document.getElementById('openBtn');
+const env=document.getElementById('envelope');
+const card=document.getElementById('card');
+const music=document.getElementById('music');
+
+btn.onclick=()=>{
+  env.classList.add('open');
+
   setTimeout(()=>{
-    document.getElementById("envBox").style.display="none";
-    document.getElementById("card").style.display="block";
-    document.body.classList.add("tet-bg");
-    startMusic();
+    document.getElementById('envelopeWrap').style.display='none';
+    card.classList.add('show');
     startFireworks();
+
+    music.volume=0;
+    music.play();
+    let v=0;
+    const fade=setInterval(()=>{
+      if(v>=0.7) clearInterval(fade);
+      music.volume=v+=0.02;
+    },120);
   },900);
-}
+};
 
-/* ===== NHẠC FADE IN ===== */
-function startMusic(){
-  const m=document.getElementById("music");
-  m.volume=0;
-  m.play();
-  let v=0;
-  const fade=setInterval(()=>{
-    v+=0.02;
-    m.volume=Math.min(v,1);
-    if(v>=1)clearInterval(fade);
-  },120);
-}
+/* ===== PHÁO HOA TIA ===== */
+const canvas=document.getElementById('fireworks');
+const ctx=canvas.getContext('2d');
 
-/* ===== PHÁO HOA ===== */
-const canvas=document.getElementById("fireworks");
-const ctx=canvas.getContext("2d");
 function resize(){
-  canvas.width=innerWidth;
-  canvas.height=innerHeight;
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
 }
-window.onresize=resize;
-resize();
+resize();window.onresize=resize;
 
-let sparks=[];
-function startFireworks(){
-  setInterval(()=>{
-    for(let i=0;i<40;i++){
-      sparks.push({
-        x:Math.random()*canvas.width,
-        y:canvas.height,
-        vx:(Math.random()-0.5)*6,
-        vy:-Math.random()*9-6,
-        life:60,
-        color:`hsl(${Math.random()*360},100%,60%)`
-      });
-    }
-  },900);
+let particles=[];
+function firework(){
+  const x=Math.random()*canvas.width;
+  const y=Math.random()*canvas.height/2;
+  const colors=['#ffeb3b','#ff5722','#ff9800','#e91e63'];
 
-  function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    sparks.forEach((s,i)=>{
-      s.x+=s.vx;
-      s.y+=s.vy;
-      s.vy+=0.15;
-      s.life--;
-      ctx.fillStyle=s.color;
-      ctx.fillRect(s.x,s.y,3,3);
-      if(s.life<=0)sparks.splice(i,1);
+  for(let i=0;i<80;i++){
+    particles.push({
+      x,y,
+      vx:(Math.random()-0.5)*6,
+      vy:(Math.random()-0.5)*6,
+      life:100,
+      color:colors[Math.floor(Math.random()*colors.length)]
     });
-    requestAnimationFrame(draw);
   }
-  draw();
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach((p,i)=>{
+    p.x+=p.vx;
+    p.y+=p.vy;
+    p.life--;
+    ctx.fillStyle=p.color;
+    ctx.fillRect(p.x,p.y,2,2);
+    if(p.life<=0) particles.splice(i,1);
+  });
+  requestAnimationFrame(animate);
+}
+
+function startFireworks(){
+  setInterval(firework,800);
+  animate();
 }
 </script>
 
