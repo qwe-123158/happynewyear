@@ -1,129 +1,153 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Chúc Mừng Năm Mới Bính Ngọ</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
+<!-- Font thư pháp -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#d32f2f;
+  --dark-red:#b71c1c;
+  --bg:#fbf3e6;
+}
+
+*{box-sizing:border-box}
 
 body{
-  min-height:100vh;
+  margin:0;
+  background:var(--bg);
+  font-family:Arial, sans-serif;
+  height:100vh;
   display:flex;
-  justify-content:center;
   align-items:center;
-  background:#fbf3df;
-  font-family:'Be Vietnam Pro',sans-serif;
+  justify-content:center;
+  overflow:hidden;
 }
 
 /* ================= PHONG BÌ ================= */
-.wrapper{text-align:center}
+.wrapper{
+  text-align:center;
+}
 
 .envelope{
   position:relative;
   width:280px;
-  height:160px;
-  background:#d32f2f;
-  border-radius:0 0 18px 18px;
-  box-shadow:0 16px 35px rgba(0,0,0,.28);
-  overflow:hidden;
+  height:180px;
+  margin:auto;
+  perspective:1200px;
 }
 
-/* NẮP – GẮN TRỰC TIẾP VÀO THÂN */
-.envelope::before{
-  content:'';
+/* Thân */
+.body{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:140px;
+  background:var(--red);
+  border-radius:0 0 18px 18px;
+  box-shadow:0 12px 25px rgba(0,0,0,.25);
+  z-index:1;
+}
+
+/* Nắp – KHÍT TUYỆT ĐỐI */
+.flap{
   position:absolute;
   top:0;
   left:0;
   width:100%;
-  height:80px; /* = 50% thân */
-  background:#c62828;
-
-  /* tam giác cân CHUẨN */
+  height:90px;
+  background:var(--dark-red);
   clip-path:polygon(0 0,50% 100%,100% 0);
-
-  transform-origin:top center;
-  transition:transform .9s ease;
+  transform-origin:center bottom;
+  transform:rotateX(0deg);
+  transition:transform 1s ease;
   z-index:2;
 }
 
-/* MỞ */
-.envelope.open::before{
-  transform:rotateX(180deg);
+/* Khi mở */
+.envelope.open .flap{
+  transform:rotateX(125deg);
 }
 
-/* NÚT */
+/* ================= NÚT ================= */
 button{
-  margin-top:22px;
-  padding:12px 28px;
+  margin-top:20px;
+  padding:10px 26px;
   border:none;
-  border-radius:30px;
-  background:#d32f2f;
-  color:#fff;
+  border-radius:999px;
+  background:var(--red);
+  color:white;
   font-size:16px;
   cursor:pointer;
 }
 
 /* ================= THIỆP ================= */
 .card{
-  position:fixed;
-  inset:0;
-  display:none;
-  justify-content:center;
-  align-items:center;
-  background:url('tet-bg.png') center/cover no-repeat;
-}
-
-.card.show{display:flex}
-
-.card::after{
-  content:'';
   position:absolute;
   inset:0;
-  background:rgba(0,0,0,.12); /* sáng hơn */
+  display:none;
+  align-items:center;
+  justify-content:center;
 }
 
-.content{
-  position:relative;
-  max-width:720px;
-  margin:20px;
-  background:rgba(255,255,250,.98);
-  padding:36px;
-  border-radius:22px;
+.card.show{
+  display:flex;
+  animation:fadeIn 1.2s ease forwards;
+}
+
+.card-inner{
+  width:90%;
+  max-width:520px;
+  background:
+    linear-gradient(rgba(255,255,255,.92),rgba(255,255,255,.92)),
+    url("tet-bg.png") center/cover no-repeat;
+  border-radius:20px;
+  padding:28px 24px;
   text-align:center;
-  box-shadow:0 20px 45px rgba(0,0,0,.3);
-  z-index:2;
+  box-shadow:0 20px 40px rgba(0,0,0,.35);
 }
 
 h1{
-  font-family:'Great Vibes',cursive;
-  font-size:44px;
+  font-family:'Dancing Script', cursive;
   color:#b71c1c;
-  margin-bottom:18px;
+  font-size:36px;
+  margin-bottom:16px;
 }
 
 p{
-  font-size:17px;
-  line-height:1.75;
-  color:#4e342e;
+  font-size:16px;
+  line-height:1.6;
+  color:#333;
 }
 
-/* PHÁO HOA */
-canvas{
+/* ================= PHÁO HOA ================= */
+.firework{
   position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:1;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  animation:fire 1.2s linear infinite;
 }
 
-/* MOBILE */
-@media(max-width:600px){
-  .envelope{width:240px;height:140px}
-  .envelope::before{height:70px}
-  h1{font-size:34px}
+@keyframes fire{
+  0%{transform:scale(0);opacity:1}
+  100%{transform:scale(14);opacity:0}
+}
+
+/* ================= HIỆU ỨNG ================= */
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+/* ================= MOBILE ================= */
+@media(max-width:480px){
+  .envelope{width:220px;height:150px}
+  h1{font-size:28px}
   p{font-size:15px}
 }
 </style>
@@ -131,86 +155,67 @@ canvas{
 
 <body>
 
-<div class="wrapper" id="wrap">
-  <div class="envelope" id="env"></div>
-  <button id="openBtn">Mở Thiệp</button>
+<div class="wrapper">
+  <div class="envelope" id="env">
+    <div class="flap"></div>
+    <div class="body"></div>
+  </div>
+  <button onclick="openCard()">Mở Thiệp</button>
 </div>
 
+<!-- THIỆP -->
 <div class="card" id="card">
-  <canvas id="fw"></canvas>
-  <div class="content">
+  <div class="card-inner">
     <h1>Chúc Mừng Năm Mới Bính Ngọ</h1>
     <p id="wish"></p>
   </div>
 </div>
 
-<audio id="music" src="tet-music.mp3" loop></audio>
+<!-- NHẠC -->
+<audio id="music" src="music.mp3" loop></audio>
 
 <script>
 const wishes=[
-"Chúc năm mới sức khỏe dồi dào, học tập tiến bộ, tinh thần vững vàng và luôn tràn đầy niềm vui trong cuộc sống.",
-"Xuân mới đến mang theo hy vọng mới, chúc bạn gặt hái nhiều thành công và giữ mãi đam mê trên con đường học tập."
+"Chúc năm mới tràn đầy năng lượng tích cực, học tập tiến bộ từng ngày, luôn giữ vững niềm tin vào bản thân và tương lai phía trước.",
+"Mong rằng năm Bính Ngọ mang đến thật nhiều may mắn, sức khỏe dồi dào, học hành thuận lợi và những ước mơ dần trở thành hiện thực.",
+"Chúc bạn một năm mới an vui, học tập hiệu quả, mỗi ngày đều có động lực để tiến lên và không ngừng hoàn thiện bản thân."
 ];
-document.getElementById("wish").innerText=
-wishes[Math.floor(Math.random()*wishes.length)];
 
-const env=document.getElementById("env");
-const card=document.getElementById("card");
-const music=document.getElementById("music");
-
-document.getElementById("openBtn").onclick=()=>{
-  env.classList.add("open");
-
+function openCard(){
+  document.getElementById("env").classList.add("open");
   setTimeout(()=>{
-    document.getElementById("wrap").style.display="none";
-    card.classList.add("show");
-
-    music.volume=0;
-    music.play();
-    let v=0;
-    const fade=setInterval(()=>{
-      if(v>=0.7) clearInterval(fade);
-      music.volume=v+=0.02;
-    },120);
-
+    document.getElementById("card").classList.add("show");
+    document.getElementById("wish").innerText =
+      wishes[Math.floor(Math.random()*wishes.length)];
+    playMusic();
     fireworks();
   },900);
-};
-
-/* PHÁO HOA TIA */
-const canvas=document.getElementById("fw");
-const ctx=canvas.getContext("2d");
-canvas.width=innerWidth;
-canvas.height=innerHeight;
-onresize=()=>{canvas.width=innerWidth;canvas.height=innerHeight};
-
-let ps=[];
-function boom(){
-  const x=Math.random()*canvas.width;
-  const y=Math.random()*canvas.height/2;
-  const colors=["#ffeb3b","#ff5722","#ff9800","#e91e63","#ffc107"];
-  for(let i=0;i<100;i++){
-    ps.push({x,y,
-      vx:(Math.random()-.5)*7,
-      vy:(Math.random()-.5)*7,
-      l:110,
-      c:colors[Math.floor(Math.random()*colors.length)]
-    });
-  }
 }
-function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ps.forEach((p,i)=>{
-    p.x+=p.vx;p.y+=p.vy;p.l--;
-    ctx.fillStyle=p.c;
-    ctx.fillRect(p.x,p.y,2,2);
-    if(p.l<=0) ps.splice(i,1);
-  });
-  requestAnimationFrame(draw);
+
+/* Nhạc fade in */
+function playMusic(){
+  const m=document.getElementById("music");
+  m.volume=0;
+  m.play();
+  let v=0;
+  const fade=setInterval(()=>{
+    if(v<1){v+=0.02;m.volume=v}
+    else clearInterval(fade);
+  },100);
 }
+
+/* Pháo hoa */
 function fireworks(){
-  setInterval(boom,900);
-  draw();
+  setInterval(()=>{
+    const f=document.createElement("div");
+    f.className="firework";
+    f.style.left=Math.random()*100+"vw";
+    f.style.top=Math.random()*100+"vh";
+    f.style.background=
+      `hsl(${Math.random()*360},100%,60%)`;
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1200);
+  },250);
 }
 </script>
 
