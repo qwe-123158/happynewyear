@@ -12,91 +12,94 @@
 body{
   margin:0;
   height:100vh;
-  background:#fbf3e6;
   display:flex;
   justify-content:center;
   align-items:center;
-  font-family:Arial, sans-serif;
+  background:#fbf3e6;
   overflow:hidden;
+  font-family:Arial, sans-serif;
 }
 
 /* ================= PHONG BÌ ================= */
-#envelopeScreen{
+#envelope-screen{
   text-align:center;
-  transition:opacity .8s ease, transform .8s ease;
+  transition:opacity .8s ease;
 }
 
 .envelope{
+  width:300px;
+  max-width:80vw;
   position:relative;
-  width:260px;
-  height:180px;
-  margin:auto;
+  perspective:1000px;
 }
 
+/* Thân */
 .envelope-body{
-  position:absolute;
-  bottom:0;
   width:100%;
-  height:120px;
+  height:180px;
   background:#d32f2f;
   border-radius:0 0 20px 20px;
+  position:relative;
+  z-index:1;
 }
 
+/* Nắp */
 .envelope-flap{
+  width:0;
+  height:0;
+  border-left:150px solid transparent;
+  border-right:150px solid transparent;
+  border-bottom:90px solid #b71c1c;
   position:absolute;
-  top:60px;
-  width:100%;
-  height:80px;
-  background:#b71c1c;
-  clip-path:polygon(0 0,50% 100%,100% 0);
-  transform-origin:50% 100%;
-  transition:transform .8s ease, top .8s ease;
+  top:-90px;
+  left:0;
+  transform-origin:bottom center;
+  transform:rotateX(0deg);
+  transition:transform .9s ease;
+  z-index:2;
 }
 
-.envelope.open .envelope-flap{
-  transform:rotateZ(-180deg);
-  top:-20px;
+.open .envelope-flap{
+  transform:rotateX(-180deg);
 }
 
 button{
   margin-top:20px;
-  padding:10px 28px;
+  padding:12px 34px;
   border:none;
   border-radius:999px;
-  background:#d32f2f;
+  background:#c62828;
   color:#fff;
   font-size:16px;
   cursor:pointer;
 }
 
 /* ================= THIỆP ================= */
-#cardScreen{
+#card-screen{
   position:fixed;
   inset:0;
   display:flex;
   justify-content:center;
   align-items:center;
-  background:
-    linear-gradient(rgba(255,255,255,.95),rgba(255,255,255,.95)),
-    url("tet-bg.png") center/cover no-repeat;
+  background:url("tet-bg.png") center/cover no-repeat;
   opacity:0;
   pointer-events:none;
   transition:opacity 1s ease;
 }
 
-#cardScreen.show{
+#card-screen.show{
   opacity:1;
   pointer-events:auto;
 }
 
 .card{
-  background:#fff;
-  max-width:520px;
+  background:#ffffffee;
   width:90%;
-  padding:30px 24px;
+  max-width:560px;
+  padding:34px 28px;
   border-radius:22px;
   text-align:center;
-  box-shadow:0 25px 45px rgba(0,0,0,.35);
+  box-shadow:0 30px 60px rgba(0,0,0,.35);
 }
 
 h1{
@@ -108,25 +111,24 @@ h1{
 
 p{
   font-size:16px;
-  line-height:1.6;
+  line-height:1.7;
   color:#333;
 }
 
 /* ================= PHÁO HOA ================= */
 .firework{
   position:fixed;
-  width:4px;
-  height:4px;
+  width:5px;
+  height:5px;
   border-radius:50%;
-  animation:boom 1.2s linear infinite;
+  animation:boom 1.3s linear infinite;
 }
 
 @keyframes boom{
   0%{transform:scale(0);opacity:1}
-  100%{transform:scale(15);opacity:0}
+  100%{transform:scale(20);opacity:0}
 }
 
-/* MOBILE */
 @media(max-width:480px){
   h1{font-size:30px}
 }
@@ -136,7 +138,7 @@ p{
 <body>
 
 <!-- PHONG BÌ -->
-<div id="envelopeScreen">
+<div id="envelope-screen">
   <div class="envelope" id="env">
     <div class="envelope-flap"></div>
     <div class="envelope-body"></div>
@@ -145,7 +147,7 @@ p{
 </div>
 
 <!-- THIỆP -->
-<div id="cardScreen">
+<div id="card-screen">
   <div class="card">
     <h1>Chúc Mừng Năm Mới Bính Ngọ</h1>
     <p id="wish"></p>
@@ -156,28 +158,26 @@ p{
 
 <script>
 const wishes=[
-"Chúc năm mới an khang thịnh vượng, học tập tiến bộ, mọi điều hanh thông.",
-"Mong Bính Ngọ mang đến thật nhiều may mắn, niềm vui và thành công.",
-"Chúc một năm mới tràn đầy năng lượng tích cực và những điều tốt đẹp."
+"Chúc năm mới an khang thịnh vượng, học tập tiến bộ và tràn đầy may mắn.",
+"Mong Bính Ngọ mang đến sức khỏe, niềm vui và những thành công rực rỡ.",
+"Chúc một năm mới bình an, nhiều năng lượng tích cực và hạnh phúc dài lâu."
 ];
 
 function openCard(){
   document.getElementById("env").classList.add("open");
 
   setTimeout(()=>{
-    const envScreen=document.getElementById("envelopeScreen");
-    envScreen.style.opacity="0";
-    envScreen.style.transform="scale(.9)";
-  },600);
+    document.getElementById("envelope-screen").style.opacity="0";
+  },800);
 
   setTimeout(()=>{
-    document.getElementById("envelopeScreen").style.display="none";
-    document.getElementById("cardScreen").classList.add("show");
-    document.getElementById("wish").innerText=
+    document.getElementById("envelope-screen").style.display="none";
+    document.getElementById("card-screen").classList.add("show");
+    document.getElementById("wish").innerText =
       wishes[Math.floor(Math.random()*wishes.length)];
     playMusic();
     fireworks();
-  },1200);
+  },1400);
 }
 
 function playMusic(){
@@ -186,7 +186,7 @@ function playMusic(){
   m.play();
   let v=0;
   const fade=setInterval(()=>{
-    if(v<1){v+=0.02;m.volume=v}
+    if(v<1){v+=0.03;m.volume=v}
     else clearInterval(fade);
   },100);
 }
@@ -199,8 +199,8 @@ function fireworks(){
     f.style.top=Math.random()*100+"vh";
     f.style.background=`hsl(${Math.random()*360},100%,60%)`;
     document.body.appendChild(f);
-    setTimeout(()=>f.remove(),1200);
-  },250);
+    setTimeout(()=>f.remove(),1300);
+  },200);
 }
 </script>
 
