@@ -33,7 +33,7 @@ body{
   perspective:1000px;
 }
 
-/* Thân */
+/* Thân phong bì */
 .envelope-body{
   width:100%;
   height:180px;
@@ -43,7 +43,7 @@ body{
   z-index:1;
 }
 
-/* Nắp */
+/* NẮP PHONG BÌ – FIX CHUẨN */
 .envelope-flap{
   width:0;
   height:0;
@@ -54,13 +54,14 @@ body{
   top:-90px;
   left:0;
   transform-origin:bottom center;
-  transform:rotateX(0deg);
+  transform:rotateX(180deg); /* ⬅️ MẶC ĐỊNH: ĐÓNG */
   transition:transform .9s ease;
   z-index:2;
 }
 
+/* Khi bấm mở */
 .open .envelope-flap{
-  transform:rotateX(-180deg);
+  transform:rotateX(0deg); /* ⬅️ MỞ LÊN */
 }
 
 button{
