@@ -30,20 +30,20 @@ body{
   width:300px;
   max-width:80vw;
   position:relative;
-  perspective:1000px;
+  perspective:1200px;
 }
 
-/* Thân phong bì */
+/* Thân */
 .envelope-body{
   width:100%;
   height:180px;
   background:#d32f2f;
   border-radius:0 0 20px 20px;
   position:relative;
-  z-index:1;
+  z-index:2;
 }
 
-/* NẮP PHONG BÌ – FIX CHUẨN */
+/* Nắp */
 .envelope-flap{
   width:0;
   height:0;
@@ -54,16 +54,35 @@ body{
   top:-90px;
   left:0;
   transform-origin:bottom center;
-  transform:rotateX(180deg); /* ⬅️ MẶC ĐỊNH: ĐÓNG */
+  transform:rotateX(180deg); /* ĐÓNG */
   transition:transform .9s ease;
-  z-index:2;
+  z-index:4;
 }
 
-/* Khi bấm mở */
 .open .envelope-flap{
-  transform:rotateX(0deg); /* ⬅️ MỞ LÊN */
+  transform:rotateX(0deg); /* MỞ */
 }
 
+/* ================= THIỆP TRƯỢT ================= */
+.card-preview{
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%) translateY(120px);
+  width:92%;
+  height:140px;
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  z-index:1;
+  transition:transform 1s ease;
+}
+
+.open .card-preview{
+  transform:translateX(-50%) translateY(-140px);
+}
+
+/* ================= NÚT ================= */
 button{
   margin-top:20px;
   padding:12px 34px;
@@ -75,7 +94,7 @@ button{
   cursor:pointer;
 }
 
-/* ================= THIỆP ================= */
+/* ================= THIỆP FULL ================= */
 #card-screen{
   position:fixed;
   inset:0;
@@ -97,41 +116,42 @@ button{
   background:#ffffffee;
   width:90%;
   max-width:560px;
-  padding:34px 28px;
-  border-radius:22px;
+  padding:36px 30px;
+  border-radius:24px;
   text-align:center;
   box-shadow:0 30px 60px rgba(0,0,0,.35);
 }
 
 h1{
   font-family:'Dancing Script', cursive;
-  font-size:38px;
+  font-size:40px;
   color:#b71c1c;
-  margin-bottom:16px;
+  margin-bottom:20px;
 }
 
 p{
   font-size:16px;
-  line-height:1.7;
+  line-height:1.75;
   color:#333;
+  white-space:pre-line;
 }
 
-/* ================= PHÁO HOA ================= */
+/* ================= PHÁO HOA TIA DÀI ================= */
 .firework{
   position:fixed;
-  width:5px;
-  height:5px;
+  width:4px;
+  height:4px;
   border-radius:50%;
-  animation:boom 1.3s linear infinite;
+  animation:explode 1.6s ease-out forwards;
 }
 
-@keyframes boom{
+@keyframes explode{
   0%{transform:scale(0);opacity:1}
-  100%{transform:scale(20);opacity:0}
+  100%{transform:scale(28);opacity:0}
 }
 
 @media(max-width:480px){
-  h1{font-size:30px}
+  h1{font-size:32px}
 }
 </style>
 </head>
@@ -142,6 +162,7 @@ p{
 <div id="envelope-screen">
   <div class="envelope" id="env">
     <div class="envelope-flap"></div>
+    <div class="card-preview"></div>
     <div class="envelope-body"></div>
   </div>
   <button onclick="openCard()">Mở Thiệp</button>
@@ -159,17 +180,37 @@ p{
 
 <script>
 const wishes=[
-"Chúc năm mới an khang thịnh vượng, học tập tiến bộ và tràn đầy may mắn.",
-"Mong Bính Ngọ mang đến sức khỏe, niềm vui và những thành công rực rỡ.",
-"Chúc một năm mới bình an, nhiều năng lượng tích cực và hạnh phúc dài lâu."
+`Năm mới Bính Ngọ gõ cửa,
+chúc bạn luôn mạnh khỏe, tinh thần vững vàng
+và trái tim luôn đầy nhiệt huyết.
+Mong mọi nỗ lực trong học tập và cuộc sống
+đều được đền đáp xứng đáng,
+mỗi ngày trôi qua là một bước tiến mới
+trên con đường bạn đã chọn.`,
+
+`Xuân về mang theo hy vọng mới,
+chúc bạn một năm an yên và bền bỉ.
+Dù thử thách có đến,
+hãy luôn tin vào bản thân mình,
+giữ vững ý chí và không ngừng cố gắng.
+Thành công sẽ đến với những ai kiên trì
+và không bỏ cuộc.`,
+
+`Năm mới không chỉ là khởi đầu,
+mà là cơ hội để bạn trưởng thành hơn.
+Chúc bạn học tập tiến bộ,
+cuộc sống nhiều niềm vui,
+gia đình luôn ấm áp yêu thương
+và mỗi ngày đều có lý do để mỉm cười.`
 ];
 
 function openCard(){
-  document.getElementById("env").classList.add("open");
+  const env=document.getElementById("env");
+  env.classList.add("open");
 
   setTimeout(()=>{
     document.getElementById("envelope-screen").style.opacity="0";
-  },800);
+  },1200);
 
   setTimeout(()=>{
     document.getElementById("envelope-screen").style.display="none";
@@ -178,7 +219,7 @@ function openCard(){
       wishes[Math.floor(Math.random()*wishes.length)];
     playMusic();
     fireworks();
-  },1400);
+  },2000);
 }
 
 function playMusic(){
@@ -192,16 +233,19 @@ function playMusic(){
   },100);
 }
 
+/* PHÁO HOA NHIỀU TẦNG */
 function fireworks(){
   setInterval(()=>{
-    const f=document.createElement("div");
-    f.className="firework";
-    f.style.left=Math.random()*100+"vw";
-    f.style.top=Math.random()*100+"vh";
-    f.style.background=`hsl(${Math.random()*360},100%,60%)`;
-    document.body.appendChild(f);
-    setTimeout(()=>f.remove(),1300);
-  },200);
+    for(let i=0;i<10;i++){
+      const f=document.createElement("div");
+      f.className="firework";
+      f.style.left=Math.random()*100+"vw";
+      f.style.top=Math.random()*60+"vh";
+      f.style.background=`hsl(${Math.random()*360},100%,60%)`;
+      document.body.appendChild(f);
+      setTimeout(()=>f.remove(),1600);
+    }
+  },500);
 }
 </script>
 
