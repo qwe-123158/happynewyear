@@ -15,7 +15,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #fbf3e6; /* Nền trang đầu màu kem */
+            background: #fbf3e6;
             overflow: hidden;
             font-family: Arial, sans-serif;
         }
@@ -98,13 +98,13 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.94);
             width: 90%;
             max-width: 500px;
             padding: 40px 30px;
             border-radius: 25px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
             border: 2px solid #ffd700;
             z-index: 20;
         }
@@ -122,7 +122,7 @@
             color: #333;
         }
 
-        /* ================= PHÁO HOA ĐA TẦNG ================= */
+        /* ================= PHÁO HOA SIÊU CẤP ================= */
         .particle {
             position: absolute;
             width: 4px;
@@ -130,12 +130,13 @@
             border-radius: 50%;
             pointer-events: none;
             z-index: 99;
-            animation: firework-animation 1.5s ease-out forwards;
+            animation: firework-animation 1.8s ease-out forwards;
         }
 
         @keyframes firework-animation {
-            0% { transform: translate(0, 0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--dx), var(--dy)) scale(0.5); opacity: 0; }
+            0% { transform: translate(0, 0) scale(1.5); opacity: 1; }
+            50% { opacity: 1; filter: brightness(1.5); }
+            100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
         }
     </style>
 </head>
@@ -168,16 +169,11 @@
 
         function openCard() {
             document.getElementById("env").classList.add("open");
-
-            setTimeout(() => {
-                document.getElementById("envelope-screen").style.opacity = "0";
-            }, 800);
-
+            setTimeout(() => { document.getElementById("envelope-screen").style.opacity = "0"; }, 800);
             setTimeout(() => {
                 document.getElementById("envelope-screen").style.display = "none";
                 document.getElementById("card-screen").classList.add("show");
                 document.getElementById("wish").innerText = wishes[Math.floor(Math.random() * wishes.length)];
-                
                 playMusic();
                 startFireworks();
             }, 1400);
@@ -186,19 +182,18 @@
         function playMusic() {
             const m = document.getElementById("music");
             m.volume = 0.5;
-            m.play().catch(e => console.log("Cần click để phát nhạc"));
+            m.play().catch(e => console.log("Click để nghe nhạc"));
         }
 
-        // Hàm tạo pháo hoa đa tầng đa sắc
         function createFirework() {
             const x = Math.random() * window.innerWidth;
             const y = Math.random() * window.innerHeight;
             
-            // Định nghĩa các tầng pháo (Số lượng hạt, độ xa, màu sắc)
+            // Tăng số tầng và số lượng hạt mỗi tầng
             const layers = [
-                { count: 30, dist: 180, colors: ['#ff0000', '#ffea00', '#ff00ff'] }, // Tầng rộng
-                { count: 20, dist: 100, colors: ['#00ffff', '#00ff00', '#ffffff'] }, // Tầng trung
-                { count: 15, dist: 50,  colors: ['#ffffff', '#ffaa00'] }            // Tâm pháo
+                { count: 45, dist: 250, colors: ['#ff0044', '#ffea00', '#ffffff'] }, // Tầng ngoài cùng cực lớn
+                { count: 35, dist: 150, colors: ['#00ffff', '#00ff88', '#ff00ff'] }, // Tầng giữa
+                { count: 25, dist: 80,  colors: ['#ffffff', '#ffd700', '#ff8800'] }  // Tầng lõi rực sáng
             ];
 
             layers.forEach(layer => {
@@ -210,27 +205,30 @@
                     p.style.backgroundColor = layerColor;
                     p.style.left = x + "px";
                     p.style.top = y + "px";
-                    p.style.boxShadow = `0 0 10px ${layerColor}`;
                     
-                    const angle = (i / layer.count) * Math.PI * 2;
-                    const randomDist = layer.dist * (0.8 + Math.random() * 0.4);
+                    // Hiệu ứng phát sáng mạnh
+                    p.style.boxShadow = `0 0 12px ${layerColor}, 0 0 20px ${layerColor}`;
+                    
+                    const angle = (i / layer.count) * Math.PI * 2 + (Math.random() * 0.5);
+                    const randomDist = layer.dist * (0.7 + Math.random() * 0.6);
                     
                     p.style.setProperty('--dx', Math.cos(angle) * randomDist + "px");
                     p.style.setProperty('--dy', Math.sin(angle) * randomDist + "px");
 
+                    // Random thời gian nổ nhẹ để tạo sự tự nhiên
+                    p.style.animationDuration = (1.2 + Math.random() * 0.8) + "s";
+
                     document.body.appendChild(p);
-                    setTimeout(() => p.remove(), 1500);
+                    setTimeout(() => p.remove(), 2000);
                 }
             });
         }
 
         function startFireworks() {
-            // Nổ dồn dập lúc đầu
-            for(let i=0; i<4; i++) {
-                setTimeout(createFirework, i * 400);
-            }
-            // Duy trì liên tục
-            setInterval(createFirework, 700);
+            // Đợt nổ chào mừng
+            for(let i=0; i<3; i++) { setTimeout(createFirework, i * 350); }
+            // Nổ liên tục dồn dập
+            setInterval(createFirework, 600);
         }
     </script>
 </body>
