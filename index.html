@@ -117,26 +117,83 @@ p{
 }
 
 /* ================= PHÁO HOA ================= */
-.firework{
-  position:fixed;
-  width:5px;
-  height:5px;
-  border-radius:50%;
-  animation:boom 1.3s linear infinite;
-}
+.firework {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 4px;
+        }
 
-@keyframes boom{
-  0%{transform:scale(0);opacity:1}
-  100%{transform:scale(20);opacity:0}
-}
+        /* Tạo các hạt pháo hoa bằng box-shadow đa tầng */
+        .firework, .firework::before, .firework::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            /* Mỗi dòng trong box-shadow là một "viên pháo" 
+               Cấu trúc: x y color 
+            */
+            box-shadow: 
+                0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 
+                0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff;
+            animation: explode 2s infinite ease-out;
+        }
 
-@media(max-width:480px){
-  h1{font-size:30px}
-}
-</style>
+        /* Tầng pháo hoa thứ 2 (màu sắc khác) */
+        .firework::before {
+            animation-duration: 2.5s;
+            animation-delay: -0.5s;
+        }
+
+        /* Tầng pháo hoa thứ 3 (nhỏ hơn, bay xa hơn) */
+        .firework::after {
+            animation-duration: 3s;
+            animation-delay: -1.2s;
+        }
+
+        @keyframes explode {
+            0% {
+                /* Bắt đầu tại tâm */
+                box-shadow: 0 0 #fff;
+                opacity: 1;
+            }
+            100% {
+                /* Bắn tung ra nhiều hướng với nhiều màu sắc */
+                box-shadow: 
+                    -120px -150px #ff0044, 120px -150px #ffdd00, 
+                    -180px 20px #00ff88, 180px 20px #00ccff, 
+                    -50px 180px #ff00ff, 50px 180px #ff8800,
+                    -150px -50px #ffffff, 150px -50px #aa00ff,
+                    0px -200px #ffff00, 0px 200px #00ffff;
+                opacity: 0;
+            }
+        }
+
+        /* Đặt nhiều bông pháo ở các vị trí khác nhau */
+        .f1 { top: 30%; left: 20%; }
+        .f2 { top: 50%; left: 70%; scale: 1.5; }
+        .f3 { top: 70%; left: 40%; scale: 0.8; }
+
+        h1 {
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 20px #ff0044;
+            pointer-events: none;
+        }
+    </style>
 </head>
-
 <body>
+
+    <h1>Chúc Mừng Năm Mới</h1>
+
+    <div class="firework f1"></div>
+    <div class="firework f2"></div>
+    <div class="firework f3"></div>
+
+</body>
 
 <!-- PHONG BÌ -->
 <div id="envelope-screen">
@@ -159,9 +216,9 @@ p{
 
 <script>
 const wishes=[
-"Chúc năm mới an khang thịnh vượng, học tập tiến bộ và tràn đầy may mắn.",
-"Mong Bính Ngọ mang đến sức khỏe, niềm vui và những thành công rực rỡ.",
-"Chúc một năm mới bình an, nhiều năng lượng tích cực và hạnh phúc dài lâu."
+"Chúc bạn năm mới giữ vững được tâm thế bình thản trước mọi thử thách của cuộc sống và sự minh mẫn trên con đường học vấn. Mong rằng mỗi giọt mồ hôi bên trang sách sẽ đổi lấy những nấc thang thành công rực rỡ, và mỗi trải nghiệm cuộc đời đều giúp bạn trưởng thành, bản lĩnh hơn.",
+"Năm mới, chúc bạn tìm thấy sự cân bằng tuyệt vời giữa việc nâng tầm tri thức và tận hưởng cuộc sống. Mong bạn học thêm được nhiều điều hay, thi đâu thắng đó, nhưng cũng không quên dành thời gian để yêu thương bản thân và cảm nhận những vẻ đẹp giản đơn xung quanh mình.",
+"Chúc bạn năm mới: Trí tuệ sáng suốt để chinh phục mọi đỉnh cao tri thức, và tâm hồn phong phú để tận hưởng trọn vẹn từng khoảnh khắc quý giá của cuộc sống. Học thành tài, sống hạnh phúc!"
 ];
 
 function openCard(){
