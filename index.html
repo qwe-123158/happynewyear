@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chúc Mừng Năm Mới Bính Ngọ</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
     <style>
@@ -20,10 +19,9 @@
             font-family: Arial, sans-serif;
         }
 
-        /* ================= PHONG BÌ ================= */
+        /* ================= PHONG BÌ & THIỆP TRƯỢT ================= */
         #envelope-screen {
             text-align: center;
-            transition: opacity .8s ease;
             z-index: 10;
         }
 
@@ -34,35 +32,67 @@
             position: relative;
             border-radius: 0 0 20px 20px;
             perspective: 1000px;
-            margin-bottom: 25px;
+            margin-bottom: 50px; /* Tăng khoảng cách để thiệp trượt lên */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
+        /* Nắp phong bì */
         .envelope-flap {
             width: 0;
             height: 0;
             border-left: 150px solid transparent;
             border-right: 150px solid transparent;
-            border-bottom: 90px solid #b71c1c;
+            border-bottom: 95px solid #b71c1c;
             position: absolute;
-            top: -90px;
+            top: -95px;
             left: 0;
             transform-origin: bottom center;
             transform: rotateX(180deg);
-            transition: transform .9s ease;
-            z-index: 2;
+            transition: transform .8s ease;
+            z-index: 3; /* Nằm trên cùng để che thiệp */
         }
 
-        .open .envelope-flap {
-            transform: rotateX(0deg);
+        /* Tấm thiệp nhỏ bên trong phong bì */
+        .mini-card {
+            width: 90%;
+            height: 80%;
+            background: white;
+            position: absolute;
+            bottom: 10px;
+            left: 5%;
+            z-index: 1; /* Nằm dưới nắp và thân trước */
+            border-radius: 10px;
+            transition: transform 1s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
+        .mini-card span {
+            color: #d32f2f;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* Thân trước phong bì (che phần dưới thiệp) */
         .envelope-body {
             width: 100%;
             height: 100%;
             background: #d32f2f;
             border-radius: 0 0 20px 20px;
             position: relative;
-            z-index: 1;
+            z-index: 2; /* Đè lên tấm thiệp */
+        }
+
+        /* Trạng thái mở */
+        .open .envelope-flap {
+            transform: rotateX(0deg);
+            z-index: 0; /* Đẩy nắp ra sau khi mở để thiệp hiện lên */
+        }
+
+        .open .mini-card {
+            transform: translateY(-120px); /* Thiệp trượt lên trên */
         }
 
         button {
@@ -78,7 +108,7 @@
             transition: 0.3s;
         }
 
-        /* ================= TRANG THIỆP (GIỮ NỀN) ================= */
+        /* ================= TRANG THIỆP CHÍNH ================= */
         #card-screen {
             position: fixed;
             inset: 0;
@@ -116,13 +146,7 @@
             margin-bottom: 20px;
         }
 
-        p {
-            font-size: 17px;
-            line-height: 1.8;
-            color: #333;
-        }
-
-        /* ================= HIỆU ỨNG HOA RƠI ================= */
+        /* ================= HIỆU ỨNG RƠI & PHÁO HOA ================= */
         .flower {
             position: absolute;
             top: -50px;
@@ -136,7 +160,6 @@
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* ================= PHÁO HOA SIÊU CẤP ================= */
         .particle {
             position: absolute;
             width: 4px;
@@ -149,7 +172,6 @@
 
         @keyframes firework-animation {
             0% { transform: translate(0, 0) scale(1.5); opacity: 1; }
-            50% { opacity: 1; filter: brightness(1.5); }
             100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
         }
     </style>
@@ -159,6 +181,9 @@
     <div id="envelope-screen">
         <div class="envelope" id="env">
             <div class="envelope-flap"></div>
+            <div class="mini-card" id="mc">
+                <span>🧧 2026 🧧</span>
+            </div>
             <div class="envelope-body"></div>
         </div>
         <button onclick="openCard()">Mở Thiệp</button>
@@ -176,93 +201,74 @@
 
     <script>
         const wishes = [
-            "Chúc bạn năm mới giữ vững được tâm thế bình thản trước mọi thử thách của cuộc sống và sự minh mẫn trên con đường học vấn. Mong rằng mỗi giọt mồ hôi bên trang sách sẽ đổi lấy những nấc thang thành công rực rỡ.",
-            "Năm mới, chúc bạn tìm thấy sự cân bằng tuyệt vời giữa việc nâng tầm tri thức và tận hưởng cuộc sống. Mong bạn học thêm được nhiều điều hay, thi đâu thắng đó!",
-            "Chúc bạn năm mới: Trí tuệ sáng suốt để chinh phục mọi đỉnh cao tri thức, và tâm hồn phong phú để tận hưởng trọn vẹn từng khoảnh khắc quý giá. Học thành tài, sống hạnh phúc!"
+            "Chúc bạn năm mới giữ vững được tâm thế bình thản trước mọi thử thách và gặt hái thành công rực rỡ.",
+            "Năm mới, chúc bạn tìm thấy sự cân bằng tuyệt vời giữa tri thức và niềm vui cuộc sống!",
+            "Trí tuệ sáng suốt, tâm hồn phong phú, học thành tài, sống hạnh phúc!"
         ];
 
         function openCard() {
+            // Bước 1: Mở nắp và trượt thiệp
             document.getElementById("env").classList.add("open");
-            setTimeout(() => { document.getElementById("envelope-screen").style.opacity = "0"; }, 800);
+            
+            // Bước 2: Sau khi trượt lên xong (khoảng 1.2s), chuyển sang màn hình lời chúc
+            setTimeout(() => { 
+                document.getElementById("envelope-screen").style.opacity = "0"; 
+            }, 1200);
+
             setTimeout(() => {
                 document.getElementById("envelope-screen").style.display = "none";
                 document.getElementById("card-screen").classList.add("show");
                 document.getElementById("wish").innerText = wishes[Math.floor(Math.random() * wishes.length)];
+                
                 playMusic();
                 startFireworks();
-                startFlowers(); // Bắt đầu hiệu ứng hoa rơi
-            }, 1400);
+                startFlowers();
+            }, 2000);
         }
 
         function playMusic() {
             const m = document.getElementById("music");
             m.volume = 0.5;
-            m.play().catch(e => console.log("Click để nghe nhạc"));
+            m.play().catch(e => console.log("Cần tương tác để phát nhạc"));
         }
 
-        /* --- LOGIC HOA RƠI --- */
         function createFlower() {
             const flower = document.createElement("div");
             flower.className = "flower";
-            
-            // Random giữa hoa mai (vàng) và hoa đào (hồng)
-            const isMai = Math.random() > 0.5;
-            flower.innerText = isMai ? "🌼" : "🌸";
-            
-            // Random vị trí ngang, kích thước và thời gian rơi
+            flower.innerText = Math.random() > 0.5 ? "🌼" : "🌸";
             const startPos = Math.random() * window.innerWidth;
-            const size = Math.random() * 15 + 15; // từ 15px đến 30px
-            const duration = Math.random() * 3 + 4; // từ 4s đến 7s
-
+            const duration = Math.random() * 3 + 4;
             flower.style.left = startPos + "px";
-            flower.style.fontSize = size + "px";
+            flower.style.fontSize = (Math.random() * 15 + 15) + "px";
             flower.style.animationDuration = duration + "s";
-            
-            // Thêm hiệu ứng mờ nhẹ cho hoa ở xa
-            flower.style.opacity = Math.random() * 0.5 + 0.5;
-
             document.body.appendChild(flower);
-
-            // Xóa hoa sau khi rơi xong để tránh nặng máy
-            setTimeout(() => {
-                flower.remove();
-            }, duration * 1000);
+            setTimeout(() => flower.remove(), duration * 1000);
         }
 
         function startFlowers() {
-            // Cứ mỗi 300ms tạo ra một bông hoa mới
             setInterval(createFlower, 300);
         }
 
-        /* --- LOGIC PHÁO HOA --- */
         function createFirework() {
             const x = Math.random() * window.innerWidth;
             const y = Math.random() * window.innerHeight;
-            
             const layers = [
-                { count: 45, dist: 250, colors: ['#ff0044', '#ffea00', '#ffffff'] },
-                { count: 35, dist: 150, colors: ['#00ffff', '#00ff88', '#ff00ff'] },
-                { count: 25, dist: 80,  colors: ['#ffffff', '#ffd700', '#ff8800'] }
+                { count: 40, dist: 200, colors: ['#ff0044', '#ffea00', '#ffffff'] },
+                { count: 30, dist: 120, colors: ['#00ffff', '#00ff88', '#ff00ff'] }
             ];
-
             layers.forEach(layer => {
                 const layerColor = layer.colors[Math.floor(Math.random() * layer.colors.length)];
-                
                 for (let i = 0; i < layer.count; i++) {
                     const p = document.createElement("div");
                     p.className = "particle";
                     p.style.backgroundColor = layerColor;
                     p.style.left = x + "px";
                     p.style.top = y + "px";
-                    p.style.boxShadow = `0 0 12px ${layerColor}, 0 0 20px ${layerColor}`;
-                    
-                    const angle = (i / layer.count) * Math.PI * 2 + (Math.random() * 0.5);
-                    const randomDist = layer.dist * (0.7 + Math.random() * 0.6);
-                    
+                    p.style.boxShadow = `0 0 10px ${layerColor}`;
+                    const angle = (i / layer.count) * Math.PI * 2;
+                    const randomDist = layer.dist * (0.8 + Math.random() * 0.4);
                     p.style.setProperty('--dx', Math.cos(angle) * randomDist + "px");
                     p.style.setProperty('--dy', Math.sin(angle) * randomDist + "px");
-                    p.style.animationDuration = (1.2 + Math.random() * 0.8) + "s";
-
                     document.body.appendChild(p);
                     setTimeout(() => p.remove(), 2000);
                 }
@@ -270,8 +276,7 @@
         }
 
         function startFireworks() {
-            for(let i=0; i<3; i++) { setTimeout(createFirework, i * 350); }
-            setInterval(createFirework, 600);
+            setInterval(createFirework, 700);
         }
     </script>
 </body>
