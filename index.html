@@ -15,7 +15,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #fbf3e6;
+            background: #fbf3e6; /* Nền trang đầu màu kem */
             overflow: hidden;
             font-family: Arial, sans-serif;
         }
@@ -29,54 +29,64 @@
 
         .envelope {
             width: 300px;
-            height: 200px;
+            height: 180px;
             background: #d32f2f;
             position: relative;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 0 0 20px 20px;
+            perspective: 1000px;
+            margin-bottom: 20px;
         }
 
-        /* Nắp phong bì */
         .envelope-flap {
-            position: absolute;
-            top: 0;
-            left: 0;
+            width: 0;
+            height: 0;
             border-left: 150px solid transparent;
             border-right: 150px solid transparent;
-            border-top: 100px solid #b71c1c; /* Đổi thành border-top để lật xuống */
-            transform-origin: top;
-            transition: transform 0.6s ease;
+            border-bottom: 90px solid #b71c1c;
+            position: absolute;
+            top: -90px;
+            left: 0;
+            transform-origin: bottom center;
+            transform: rotateX(180deg);
+            transition: transform .9s ease;
             z-index: 2;
         }
 
         .open .envelope-flap {
-            transform: rotateX(180deg);
-            z-index: 0;
+            transform: rotateX(0deg);
+        }
+
+        .envelope-body {
+            width: 100%;
+            height: 100%;
+            background: #d32f2f;
+            border-radius: 0 0 20px 20px;
+            position: relative;
+            z-index: 1;
         }
 
         button {
-            margin-top: 50px;
-            padding: 12px 34px;
+            padding: 12px 40px;
             border: none;
             border-radius: 999px;
             background: #c62828;
             color: #fff;
             font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: 0.3s;
         }
 
-        button:active { transform: scale(0.95); }
-
-        /* ================= THIỆP ================= */
+        /* ================= TRANG THIỆP (GIỮ NỀN CŨ) ================= */
         #card-screen {
             position: fixed;
             inset: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: radial-gradient(circle, #b71c1c 0%, #1a0000 100%);
+            /* GIỮ NGUYÊN NỀN NÀY NHƯ BẠN YÊU CẦU */
+            background: url("tet-bg.png") center/cover no-repeat; 
             opacity: 0;
             pointer-events: none;
             transition: opacity 1s ease;
@@ -89,53 +99,43 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.95);
+            background: #ffffffee; /* Trắng mờ để nổi bật nội dung trên nền ảnh */
             width: 90%;
             max-width: 500px;
-            padding: 40px;
-            border-radius: 20px;
+            padding: 40px 30px;
+            border-radius: 25px;
             text-align: center;
-            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
             border: 2px solid #ffd700;
-            position: relative;
-            z-index: 20;
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
-            font-size: 32px;
+            font-size: 36px;
             color: #b71c1c;
-            margin-top: 0;
+            margin-bottom: 20px;
         }
 
         p {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #444;
-            font-style: italic;
+            font-size: 17px;
+            line-height: 1.8;
+            color: #333;
         }
 
         /* ================= PHÁO HOA ================= */
-        .firework {
+        .firework-particle {
             position: absolute;
-            width: 4px;
-            height: 4px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
             pointer-events: none;
-            z-index: 6;
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            animation: explode 1s ease-out forwards;
+            z-index: 999;
+            animation: explode 1.2s ease-out forwards;
         }
 
         @keyframes explode {
-            0% { transform: translate(0, 0); opacity: 1; }
-            100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
         }
     </style>
 </head>
@@ -144,15 +144,16 @@
     <div id="envelope-screen">
         <div class="envelope" id="env">
             <div class="envelope-flap"></div>
+            <div class="envelope-body"></div>
         </div>
-        <button onclick="openCard()">Mở Thiệp Chúc Tết</button>
+        <button onclick="openCard()">Mở Thiệp</button>
     </div>
 
     <div id="card-screen">
         <div class="card">
             <h1>Chúc Mừng Năm Mới Bính Ngọ</h1>
             <p id="wish"></p>
-            <div style="font-size: 40px;">🧧🌸🧨</div>
+            <div style="font-size: 30px; margin-top: 15px;">🧧🌸🧨</div>
         </div>
     </div>
 
@@ -166,15 +167,12 @@
         ];
 
         function openCard() {
-            // 1. Hiệu ứng mở nắp
             document.getElementById("env").classList.add("open");
 
-            // 2. Mờ dần phong bì
             setTimeout(() => {
                 document.getElementById("envelope-screen").style.opacity = "0";
-            }, 600);
+            }, 800);
 
-            // 3. Hiện thiệp và chạy hiệu ứng
             setTimeout(() => {
                 document.getElementById("envelope-screen").style.display = "none";
                 document.getElementById("card-screen").classList.add("show");
@@ -182,45 +180,41 @@
                 
                 playMusic();
                 startFireworks();
-            }, 1200);
+            }, 1400);
         }
 
         function playMusic() {
             const m = document.getElementById("music");
-            m.volume = 0;
-            m.play().catch(() => console.log("Cần tương tác người dùng để phát nhạc"));
-            let v = 0;
-            const fade = setInterval(() => {
-                if (v < 0.5) { v += 0.05; m.volume = v; }
-                else clearInterval(fade);
-            }, 150);
+            m.volume = 0.5;
+            m.play().catch(e => console.log("Cần click để phát nhạc"));
         }
 
-        function createFirework() {
+        function createFireworkPulse() {
             const x = Math.random() * window.innerWidth;
             const y = Math.random() * window.innerHeight;
-            const color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+            const colors = ['#ff0044', '#00ccff', '#ffdd00', '#00ff88', '#ffffff', '#ff00ff'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
 
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 35; i++) {
                 const p = document.createElement("div");
-                p.className = "particle";
+                p.className = "firework-particle";
                 p.style.backgroundColor = color;
                 p.style.left = x + "px";
                 p.style.top = y + "px";
+                p.style.boxShadow = `0 0 8px ${color}`;
                 
-                // Tạo hướng nổ ngẫu nhiên
                 const angle = Math.random() * Math.PI * 2;
-                const dist = Math.random() * 100 + 50;
-                p.style.setProperty('--dx', Math.cos(angle) * dist + "px");
-                p.style.setProperty('--dy', Math.sin(angle) * dist + "px");
+                const velocity = Math.random() * 200 + 50;
+                p.style.setProperty('--dx', Math.cos(angle) * velocity + "px");
+                p.style.setProperty('--dy', Math.sin(angle) * velocity + "px");
 
                 document.body.appendChild(p);
-                setTimeout(() => p.remove(), 1000);
+                setTimeout(() => p.remove(), 1200);
             }
         }
 
         function startFireworks() {
-            setInterval(createFirework, 500);
+            setInterval(createFireworkPulse, 500);
         }
     </script>
 </body>
