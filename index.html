@@ -19,39 +19,41 @@
             font-family: 'Arial', sans-serif;
         }
 
-        /* ================= PHONG BÌ GIỐNG ẢNH MẪU ================= */
+        /* ================= PHONG BÌ CAO CẤP ================= */
         #envelope-screen {
             text-align: center;
             transition: opacity 0.8s ease;
             z-index: 10;
         }
 
-        .envelope-container {
+        .envelope-wrapper {
             position: relative;
-            width: 300px;
+            width: 320px;
             height: 200px;
-            background: #b71c1c; /* Lớp nền phía sau */
-            border-radius: 5px 5px 15px 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: #b71c1c;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             margin: 0 auto;
+            perspective: 1000px;
         }
 
-        /* Nắp phong bì (Tam giác trên) */
+        /* Nắp phong bì tam giác tinh tế */
         .flap {
             position: absolute;
             top: 0;
             left: 0;
-            width: 0;
-            height: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-top: 110px solid #d32f2f; /* Màu nắp */
+            width: 100%;
+            height: 100%;
+            background: #d32f2f;
+            clip-path: polygon(0 0, 100% 0, 50% 55%);
+            border-bottom: 2px solid #ffd700; /* Viền vàng nhẹ ở mép nắp */
             transform-origin: top;
-            transition: transform 0.6s ease;
-            z-index: 3;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 4;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        /* Lớp thân phía trước (Túi đựng) */
+        /* Thân phong bì phía trước */
         .pocket {
             position: absolute;
             bottom: 0;
@@ -60,51 +62,73 @@
             height: 100%;
             background: #d32f2f;
             border-radius: 0 0 15px 15px;
-            /* Tạo hình cắt vát cho giống ảnh */
-            clip-path: polygon(0 40%, 50% 70%, 100% 40%, 100% 100%, 0 100%);
-            z-index: 2;
+            clip-path: polygon(0 35%, 15% 35%, 50% 65%, 85% 35%, 100% 35%, 100% 100%, 0 100%);
+            z-index: 3;
+            border-top: 1px solid rgba(255,215,0,0.3);
         }
 
-        /* Tấm thiệp nhỏ trượt ra */
-        .letter-preview {
+        /* Thiệp nằm bên trong */
+        .letter-inner {
             position: absolute;
-            top: 10%;
-            left: 5%;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
             width: 90%;
-            height: 80%;
+            height: 85%;
             background: #fff;
-            border-radius: 5px;
-            z-index: 1;
+            border-radius: 8px;
+            z-index: 2;
             transition: transform 0.8s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        /* Họa tiết vàng trang trí */
+        .gold-seal {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 45px;
+            height: 45px;
+            background: radial-gradient(circle, #ffd700, #b8860b);
+            border-radius: 50%;
+            border: 2px solid #fff;
+            z-index: 5;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #d32f2f;
-            font-size: 12px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+            color: #b71c1c;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            transition: opacity 0.4s;
         }
 
-        /* Trạng thái mở */
-        .open .flap {
-            transform: rotateX(180deg);
-            z-index: 0;
-        }
-        .open .letter-preview {
-            transform: translateY(-100px);
-        }
+        /* Mở phong bì */
+        .open .flap { transform: rotateX(180deg); }
+        .open .letter-inner { transform: translate(-50%, -130px); }
+        .open .gold-seal { opacity: 0; pointer-events: none; }
 
         .btn-open {
-            margin-top: 50px;
-            padding: 12px 40px;
-            background: #c62828;
-            color: white;
-            border: none;
-            border-radius: 25px;
+            margin-top: 60px;
+            padding: 14px 45px;
+            background: linear-gradient(135deg, #d32f2f, #b71c1c);
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            border-radius: 30px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 20px rgba(183, 28, 28, 0.4);
+            transition: 0.3s;
         }
+        .btn-open:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(183, 28, 28, 0.5); }
 
         /* ================= TRANG THIỆP CHÍNH ================= */
         #card-screen {
@@ -119,67 +143,60 @@
             transition: opacity 1.2s ease;
             z-index: 5;
         }
-
         #card-screen.show { opacity: 1; pointer-events: auto; }
 
-        .card-content {
-            background: rgba(255, 255, 255, 0.95);
+        .card-body {
+            background: rgba(255, 255, 255, 0.96);
             width: 90%;
-            max-width: 500px;
-            padding: 40px;
-            border-radius: 20px;
+            max-width: 550px;
+            padding: 50px 30px;
+            border-radius: 30px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-            border: 3px solid #ffd700;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.5);
+            border: 4px double #ffd700;
         }
 
-        .card-content h1 {
+        .card-body h1 {
             font-family: 'Dancing Script', cursive;
             color: #b71c1c;
-            font-size: 38px;
-            margin: 0 0 15px 0;
+            font-size: 42px;
+            margin: 0 0 20px 0;
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
         }
 
-        /* ================= HIỆU ỨNG SAU KHI MỞ ================= */
-        .flower {
-            position: absolute;
-            pointer-events: none;
-            z-index: 15;
-            animation: fall linear forwards;
-        }
+        /* ================= HIỆU ỨNG ================= */
+        .flower { position: absolute; pointer-events: none; z-index: 15; animation: fall linear forwards; }
         @keyframes fall {
             0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
         }
 
-        .particle {
-            position: absolute;
-            width: 5px; height: 5px; border-radius: 50%;
-            animation: explode 1.2s ease-out forwards;
-            z-index: 20;
-        }
+        .particle { position: absolute; width: 6px; height: 6px; border-radius: 50%; animation: explode 1.4s ease-out forwards; z-index: 20; }
         @keyframes explode {
-            0% { transform: translate(0,0); opacity: 1; }
-            100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+            0% { transform: translate(0,0) scale(1.5); opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
     <div id="envelope-screen">
-        <div class="envelope-container" id="env-box">
+        <div class="envelope-wrapper" id="main-env">
             <div class="flap"></div>
-            <div class="letter-preview">🧧 Đang gửi...</div>
+            <div class="gold-seal">🧧</div>
+            <div class="letter-inner">
+                <span style="font-size: 14px; color: #666;">Lời chúc đang tới...</span>
+            </div>
             <div class="pocket"></div>
         </div>
-        <button class="btn-open" onclick="openEnvelope()">Mở Thiệp</button>
+        <button class="btn-open" onclick="startOpening()">Mở Thiệp</button>
     </div>
 
     <div id="card-screen">
-        <div class="card-content">
+        <div class="card-body">
             <h1>Chúc Mừng Năm Mới Bính Ngọ</h1>
-            <p id="wish-text" style="font-size: 18px; line-height: 1.6; color: #333;"></p>
-            <div style="font-size: 35px; margin-top: 15px;">🧧🌸🧨</div>
+            <p id="wish-display" style="font-size: 19px; line-height: 1.7; color: #222; font-weight: 500;"></p>
+            <div style="font-size: 40px; margin-top: 25px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));">🌸🧧🧨🌼</div>
         </div>
     </div>
 
@@ -192,68 +209,65 @@
             "Chúc bạn trí tuệ sáng suốt, tâm hồn phong phú và tận hưởng trọn vẹn từng khoảnh khắc hạnh phúc của năm mới Bính Ngọ!"
         ];
 
-        function openEnvelope() {
-            const envBox = document.getElementById("env-box");
-            envBox.classList.add("open");
+        function startOpening() {
+            document.getElementById("main-env").classList.add("open");
 
-            // Sau khi hiệu ứng trượt kết thúc mới chuyển màn hình
             setTimeout(() => {
                 document.getElementById("envelope-screen").style.opacity = "0";
-            }, 1000);
+            }, 1200);
 
             setTimeout(() => {
                 document.getElementById("envelope-screen").style.display = "none";
                 document.getElementById("card-screen").classList.add("show");
-                document.getElementById("wish-text").innerText = wishes[Math.floor(Math.random() * wishes.length)];
+                document.getElementById("wish-display").innerText = wishes[Math.floor(Math.random() * wishes.length)];
                 
-                startEverything(); // Chỉ bắt đầu hoa rơi và pháo sau khi mở thiệp
-            }, 1800);
+                // Khởi động các hiệu ứng
+                const m = document.getElementById("music");
+                m.volume = 0.5;
+                m.play().catch(() => {});
+
+                setInterval(createFallingFlower, 350);
+                setInterval(createGrandFirework, 700);
+            }, 2000);
         }
 
-        function startEverything() {
-            // 1. Chạy nhạc
-            const m = document.getElementById("music");
-            m.volume = 0.4;
-            m.play().catch(() => {});
-
-            // 2. Chạy hoa rơi
-            setInterval(createFlower, 400);
-
-            // 3. Chạy pháo hoa
-            setInterval(createFirework, 600);
-        }
-
-        function createFlower() {
+        function createFallingFlower() {
             const f = document.createElement('div');
             f.className = 'flower';
-            f.innerHTML = Math.random() > 0.5 ? '🌸' : '🌻';
+            f.innerHTML = Math.random() > 0.5 ? '🌸' : '🌼';
             f.style.left = Math.random() * 100 + 'vw';
-            f.style.fontSize = (Math.random() * 15 + 15) + 'px';
-            const duration = Math.random() * 3 + 4;
-            f.style.animationDuration = duration + 's';
+            f.style.fontSize = (Math.random() * 10 + 20) + 'px';
+            const dur = Math.random() * 3 + 4;
+            f.style.animationDuration = dur + 's';
             document.body.appendChild(f);
-            setTimeout(() => f.remove(), duration * 1000);
+            setTimeout(() => f.remove(), dur * 1000);
         }
 
-        function createFirework() {
+        function createGrandFirework() {
             const x = Math.random() * window.innerWidth;
             const y = Math.random() * window.innerHeight;
-            const colors = ['#ff0044', '#ffe100', '#00ff88', '#00ccff', '#ffffff', '#ff00ff'];
-            const color = colors[Math.floor(Math.random() * colors.length)];
-
-            for (let i = 0; i < 60; i++) {
-                const p = document.createElement("div");
-                p.className = "particle";
-                p.style.backgroundColor = color;
-                p.style.left = x + "px";
-                p.style.top = y + "px";
-                p.style.boxShadow = `0 0 10px ${color}`;
-                const angle = (i / 30) * Math.PI;
-                const dist = Math.random() * 200 + 50;
-                p.style.setProperty('--dx', Math.cos(angle) * dist + "px");
-                p.style.setProperty('--dy', Math.sin(angle) * dist + "px");
-                document.body.appendChild(p);
-                setTimeout(() => p.remove(), 1200);
+            const colors = ['#ff0044', '#ffd700', '#00ff88', '#00ccff', '#ff00ff', '#ffffff'];
+            
+            // Pháo hoa 3 tầng hạt
+            for (let layer = 1; layer <= 3; layer++) {
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const particleCount = layer * 25;
+                for (let i = 0; i < particleCount; i++) {
+                    const p = document.createElement("div");
+                    p.className = "particle";
+                    p.style.backgroundColor = color;
+                    p.style.left = x + "px";
+                    p.style.top = y + "px";
+                    p.style.boxShadow = `0 0 12px ${color}`;
+                    
+                    const angle = (i / (particleCount/2)) * Math.PI;
+                    const velocity = (layer * 70) + Math.random() * 40;
+                    
+                    p.style.setProperty('--dx', Math.cos(angle) * velocity + "px");
+                    p.style.setProperty('--dy', Math.sin(angle) * velocity + "px");
+                    document.body.appendChild(p);
+                    setTimeout(() => p.remove(), 1400);
+                }
             }
         }
     </script>
