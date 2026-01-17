@@ -34,7 +34,7 @@
             position: relative;
             border-radius: 0 0 20px 20px;
             perspective: 1000px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .envelope-flap {
@@ -78,14 +78,13 @@
             transition: 0.3s;
         }
 
-        /* ================= TRANG THIỆP (GIỮ NỀN CŨ) ================= */
+        /* ================= TRANG THIỆP (GIỮ NỀN) ================= */
         #card-screen {
             position: fixed;
             inset: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* GIỮ NGUYÊN NỀN NÀY NHƯ BẠN YÊU CẦU */
             background: url("tet-bg.png") center/cover no-repeat; 
             opacity: 0;
             pointer-events: none;
@@ -99,14 +98,15 @@
         }
 
         .card {
-            background: #ffffffee; /* Trắng mờ để nổi bật nội dung trên nền ảnh */
+            background: rgba(255, 255, 255, 0.92);
             width: 90%;
             max-width: 500px;
             padding: 40px 30px;
             border-radius: 25px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             border: 2px solid #ffd700;
+            z-index: 20;
         }
 
         h1 {
@@ -122,20 +122,20 @@
             color: #333;
         }
 
-        /* ================= PHÁO HOA ================= */
-        .firework-particle {
+        /* ================= PHÁO HOA ĐA TẦNG ================= */
+        .particle {
             position: absolute;
-            width: 5px;
-            height: 5px;
+            width: 4px;
+            height: 4px;
             border-radius: 50%;
             pointer-events: none;
-            z-index: 999;
-            animation: explode 1.2s ease-out forwards;
+            z-index: 99;
+            animation: firework-animation 1.5s ease-out forwards;
         }
 
-        @keyframes explode {
+        @keyframes firework-animation {
             0% { transform: translate(0, 0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(0.5); opacity: 0; }
         }
     </style>
 </head>
@@ -189,32 +189,48 @@
             m.play().catch(e => console.log("Cần click để phát nhạc"));
         }
 
-        function createFireworkPulse() {
+        // Hàm tạo pháo hoa đa tầng đa sắc
+        function createFirework() {
             const x = Math.random() * window.innerWidth;
             const y = Math.random() * window.innerHeight;
-            const colors = ['#ff0044', '#00ccff', '#ffdd00', '#00ff88', '#ffffff', '#ff00ff'];
-            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Định nghĩa các tầng pháo (Số lượng hạt, độ xa, màu sắc)
+            const layers = [
+                { count: 30, dist: 180, colors: ['#ff0000', '#ffea00', '#ff00ff'] }, // Tầng rộng
+                { count: 20, dist: 100, colors: ['#00ffff', '#00ff00', '#ffffff'] }, // Tầng trung
+                { count: 15, dist: 50,  colors: ['#ffffff', '#ffaa00'] }            // Tâm pháo
+            ];
 
-            for (let i = 0; i < 35; i++) {
-                const p = document.createElement("div");
-                p.className = "firework-particle";
-                p.style.backgroundColor = color;
-                p.style.left = x + "px";
-                p.style.top = y + "px";
-                p.style.boxShadow = `0 0 8px ${color}`;
+            layers.forEach(layer => {
+                const layerColor = layer.colors[Math.floor(Math.random() * layer.colors.length)];
                 
-                const angle = Math.random() * Math.PI * 2;
-                const velocity = Math.random() * 200 + 50;
-                p.style.setProperty('--dx', Math.cos(angle) * velocity + "px");
-                p.style.setProperty('--dy', Math.sin(angle) * velocity + "px");
+                for (let i = 0; i < layer.count; i++) {
+                    const p = document.createElement("div");
+                    p.className = "particle";
+                    p.style.backgroundColor = layerColor;
+                    p.style.left = x + "px";
+                    p.style.top = y + "px";
+                    p.style.boxShadow = `0 0 10px ${layerColor}`;
+                    
+                    const angle = (i / layer.count) * Math.PI * 2;
+                    const randomDist = layer.dist * (0.8 + Math.random() * 0.4);
+                    
+                    p.style.setProperty('--dx', Math.cos(angle) * randomDist + "px");
+                    p.style.setProperty('--dy', Math.sin(angle) * randomDist + "px");
 
-                document.body.appendChild(p);
-                setTimeout(() => p.remove(), 1200);
-            }
+                    document.body.appendChild(p);
+                    setTimeout(() => p.remove(), 1500);
+                }
+            });
         }
 
         function startFireworks() {
-            setInterval(createFireworkPulse, 500);
+            // Nổ dồn dập lúc đầu
+            for(let i=0; i<4; i++) {
+                setTimeout(createFirework, i * 400);
+            }
+            // Duy trì liên tục
+            setInterval(createFirework, 700);
         }
     </script>
 </body>
