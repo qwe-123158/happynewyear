@@ -122,6 +122,20 @@
             color: #333;
         }
 
+        /* ================= HIỆU ỨNG HOA RƠI ================= */
+        .flower {
+            position: absolute;
+            top: -50px;
+            pointer-events: none;
+            z-index: 15;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
         /* ================= PHÁO HOA SIÊU CẤP ================= */
         .particle {
             position: absolute;
@@ -176,6 +190,7 @@
                 document.getElementById("wish").innerText = wishes[Math.floor(Math.random() * wishes.length)];
                 playMusic();
                 startFireworks();
+                startFlowers(); // Bắt đầu hiệu ứng hoa rơi
             }, 1400);
         }
 
@@ -185,15 +200,49 @@
             m.play().catch(e => console.log("Click để nghe nhạc"));
         }
 
+        /* --- LOGIC HOA RƠI --- */
+        function createFlower() {
+            const flower = document.createElement("div");
+            flower.className = "flower";
+            
+            // Random giữa hoa mai (vàng) và hoa đào (hồng)
+            const isMai = Math.random() > 0.5;
+            flower.innerText = isMai ? "🌼" : "🌸";
+            
+            // Random vị trí ngang, kích thước và thời gian rơi
+            const startPos = Math.random() * window.innerWidth;
+            const size = Math.random() * 15 + 15; // từ 15px đến 30px
+            const duration = Math.random() * 3 + 4; // từ 4s đến 7s
+
+            flower.style.left = startPos + "px";
+            flower.style.fontSize = size + "px";
+            flower.style.animationDuration = duration + "s";
+            
+            // Thêm hiệu ứng mờ nhẹ cho hoa ở xa
+            flower.style.opacity = Math.random() * 0.5 + 0.5;
+
+            document.body.appendChild(flower);
+
+            // Xóa hoa sau khi rơi xong để tránh nặng máy
+            setTimeout(() => {
+                flower.remove();
+            }, duration * 1000);
+        }
+
+        function startFlowers() {
+            // Cứ mỗi 300ms tạo ra một bông hoa mới
+            setInterval(createFlower, 300);
+        }
+
+        /* --- LOGIC PHÁO HOA --- */
         function createFirework() {
             const x = Math.random() * window.innerWidth;
             const y = Math.random() * window.innerHeight;
             
-            // Tăng số tầng và số lượng hạt mỗi tầng
             const layers = [
-                { count: 45, dist: 250, colors: ['#ff0044', '#ffea00', '#ffffff'] }, // Tầng ngoài cùng cực lớn
-                { count: 35, dist: 150, colors: ['#00ffff', '#00ff88', '#ff00ff'] }, // Tầng giữa
-                { count: 25, dist: 80,  colors: ['#ffffff', '#ffd700', '#ff8800'] }  // Tầng lõi rực sáng
+                { count: 45, dist: 250, colors: ['#ff0044', '#ffea00', '#ffffff'] },
+                { count: 35, dist: 150, colors: ['#00ffff', '#00ff88', '#ff00ff'] },
+                { count: 25, dist: 80,  colors: ['#ffffff', '#ffd700', '#ff8800'] }
             ];
 
             layers.forEach(layer => {
@@ -205,8 +254,6 @@
                     p.style.backgroundColor = layerColor;
                     p.style.left = x + "px";
                     p.style.top = y + "px";
-                    
-                    // Hiệu ứng phát sáng mạnh
                     p.style.boxShadow = `0 0 12px ${layerColor}, 0 0 20px ${layerColor}`;
                     
                     const angle = (i / layer.count) * Math.PI * 2 + (Math.random() * 0.5);
@@ -214,8 +261,6 @@
                     
                     p.style.setProperty('--dx', Math.cos(angle) * randomDist + "px");
                     p.style.setProperty('--dy', Math.sin(angle) * randomDist + "px");
-
-                    // Random thời gian nổ nhẹ để tạo sự tự nhiên
                     p.style.animationDuration = (1.2 + Math.random() * 0.8) + "s";
 
                     document.body.appendChild(p);
@@ -225,9 +270,7 @@
         }
 
         function startFireworks() {
-            // Đợt nổ chào mừng
             for(let i=0; i<3; i++) { setTimeout(createFirework, i * 350); }
-            // Nổ liên tục dồn dập
             setInterval(createFirework, 600);
         }
     </script>
