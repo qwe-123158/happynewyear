@@ -7,7 +7,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
     <style>
-        * { box-sizing: border-box; }
+        * { 
+            box-sizing: border-box; 
+            /* [BẢO MẬT] Chặn bôi đen văn bản */
+            -webkit-user-select: none; 
+            -moz-user-select: none;
+            -ms-user-select: none; 
+            user-select: none; 
+        }
         body {
             margin: 0;
             height: 100vh;
@@ -33,7 +40,6 @@
             border-radius: 0 0 20px 20px;
             perspective: 1000px;
             margin-bottom: 50px;
-            /* Đổ bóng đổ khối cho phong bì */
             box-shadow: 0 15px 35px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.2);
         }
 
@@ -50,7 +56,6 @@
             transform: rotateX(180deg);
             transition: transform .8s ease;
             z-index: 3;
-            /* Bóng đổ nhẹ dưới nắp */
             filter: drop-shadow(0 -2px 5px rgba(0,0,0,0.1));
         }
 
@@ -79,7 +84,6 @@
             z-index: 2;
         }
 
-        /* Mở phong bì */
         .open .envelope-flap {
             transform: rotateX(0deg);
             z-index: 0;
@@ -98,9 +102,7 @@
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
-            /* Bo viền màu Gold */
             border: 3px solid #ffd700;
-            /* Đổ bóng cho nút */
             box-shadow: 0 6px 20px rgba(198, 40, 40, 0.3);
             outline: none;
         }
@@ -108,8 +110,6 @@
         .btn-open:hover {
             transform: scale(1.05);
             background: #d32f2f;
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
-            color: #ffd700;
         }
 
         /* ================= MÀN HÌNH THIỆP CHÍNH ================= */
@@ -153,7 +153,7 @@
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
     <div id="envelope-screen">
         <div class="envelope" id="env">
@@ -177,10 +177,21 @@
     <audio id="music" src="tet-music.mp3" loop></audio>
 
     <script>
+        /* [BẢO MẬT] Chặn các phím tắt soi code */
+        document.addEventListener('keydown', function(e) {
+            // Chặn F12
+            if (e.keyCode === 123) { e.preventDefault(); return false; }
+            // Chặn Ctrl+U, Ctrl+S, Ctrl+C, Ctrl+Shift+I
+            if (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 67 || (e.shiftKey && e.keyCode === 73))) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
         const wishes = [
-            "Mừng xuân mới, chúc bạn mỗi trang sách mở ra là một chân trời tri thức, mỗi bước chân đi tới là một hành trình hạnh phúc, công danh thăng tiến và đời sống an nhiên.",
-            "Năm mới chúc bạn dồi dào cảm hứng để chinh phục những đỉnh cao học thuật, nhưng cũng đừng quên dành thời gian để lắng nghe nhịp đập cuộc sống, viết nên một chương mới vừa thành đạt vừa ấm áp yêu thương.",
-            "Chúc bạn năm mới trí tuệ sáng suốt, gặt hái thêm nhiều kiến thức mới, đồng thời luôn giữ được tâm thế bình  để tận hưởng trọn vẹn từng khoảnh khắc rực rỡ của cuộc đời."
+            "Chúc bạn năm mới giữ vững được tâm thế bình thản trước mọi thử thách của cuộc sống và sự minh mẫn trên con đường học vấn. Mong rằng mỗi giọt mồ hôi bên trang sách sẽ đổi lấy những nấc thang thành công rực rỡ.",
+            "Năm mới, chúc bạn tìm thấy sự cân bằng tuyệt vời giữa việc nâng tầm tri thức và tận hưởng cuộc sống. Mong bạn học thêm được nhiều điều hay, thi đâu thắng đó!",
+            "Chúc bạn năm mới: Trí tuệ sáng suốt để chinh phục mọi đỉnh cao tri thức, và tâm hồn phong phú để tận hưởng trọn vẹn từng khoảnh khắc quý giá. Học thành tài, sống hạnh phúc!"
         ];
 
         function openCard() {
@@ -190,16 +201,10 @@
                 document.getElementById("envelope-screen").style.display = "none";
                 document.getElementById("card-screen").classList.add("show");
                 document.getElementById("wish").innerText = wishes[Math.floor(Math.random() * wishes.length)];
-                playMusic();
+                document.getElementById("music").play().catch(() => {});
                 startFireworks();
                 startFlowers();
             }, 2100);
-        }
-
-        function playMusic() {
-            const m = document.getElementById("music");
-            m.volume = 0.5;
-            m.play().catch(() => {});
         }
 
         function createFlower() {
@@ -219,25 +224,35 @@
         function createFirework() {
             const x = Math.random() * window.innerWidth;
             const y = Math.random() * window.innerHeight;
-            const colors = ['#ff0044', '#ffea00', '#00ffff', '#00ff88', '#ffffff'];
-            colors.forEach(color => {
-                for (let i = 0; i < 20; i++) {
+            
+            const layers = [
+                { count: 45, dist: 250, colors: ['#ff0044', '#ffea00', '#ffffff'] },
+                { count: 35, dist: 150, colors: ['#00ffff', '#00ff88', '#ff00ff'] },
+                { count: 25, dist: 80,  colors: ['#ffffff', '#ffd700', '#ff8800'] }
+            ];
+
+            layers.forEach(layer => {
+                const layerColor = layer.colors[Math.floor(Math.random() * layer.colors.length)];
+                for (let i = 0; i < layer.count; i++) {
                     const p = document.createElement("div");
                     p.className = "particle";
-                    p.style.backgroundColor = color;
+                    p.style.backgroundColor = layerColor;
                     p.style.left = x + "px"; p.style.top = y + "px";
-                    p.style.boxShadow = `0 0 10px ${color}`;
-                    const angle = Math.random() * Math.PI * 2;
-                    const dist = Math.random() * 200 + 50;
-                    p.style.setProperty('--dx', Math.cos(angle) * dist + "px");
-                    p.style.setProperty('--dy', Math.sin(angle) * dist + "px");
+                    p.style.boxShadow = `0 0 12px ${layerColor}`;
+                    const angle = (i / layer.count) * Math.PI * 2 + (Math.random() * 0.5);
+                    const randomDist = layer.dist * (0.7 + Math.random() * 0.6);
+                    p.style.setProperty('--dx', Math.cos(angle) * randomDist + "px");
+                    p.style.setProperty('--dy', Math.sin(angle) * randomDist + "px");
                     document.body.appendChild(p);
                     setTimeout(() => p.remove(), 2000);
                 }
             });
         }
 
-        function startFireworks() { setInterval(createFirework, 800); }
+        function startFireworks() {
+            for(let i=0; i<3; i++) { setTimeout(createFirework, i * 350); }
+            setInterval(createFirework, 600);
+        }
     </script>
 </body>
 </html>
